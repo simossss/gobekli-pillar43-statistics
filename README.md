@@ -4,7 +4,7 @@
 
 Simone Pomposi — Independent Researcher
 
-Paper: [Zenodo DOI forthcoming]
+Paper: [https://zenodo.org/records/20364947](url)
 
 ---
 
