@@ -1,0 +1,363 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║  GÖBEKLI TEPE PILLAR 43 — STATISTICAL ARCHAEOASTRONOMY TEST  v3   ║
+║  Testing Sweatman & Tsikritsis (2017) constellation claims         ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+  Precession period:       25,772 yr
+  Ecliptic constellations: 13
+  Visible constellations:  44
+  Event clusters:          14
+
+  Precession validation:
+    SS at 10,950 BC → λ = 270.89°  ✓ in Sagittarius
+    VE at  3,000 BC → λ = 69.84°  ✓ in Taurus
+
+========================================================================
+EXPERIMENT 1: ANCHOR TEST (Look-Elsewhere Effect)
+========================================================================
+
+Two null models tested across 13 constellations × 4 cardinal days = 52 combos:
+  STRICT: constellation center date falls within event tolerance
+  BROAD:  any date in constellation window overlaps event tolerance
+
+  ±100 yr:  center-only = 6/52 (11.5%)    window-overlap = 34/52 (65.4%)
+  ±250 yr:  center-only = 16/52 (30.8%)    window-overlap = 35/52 (67.3%)
+  ±500 yr:  center-only = 22/52 (42.3%)    window-overlap = 37/52 (71.2%)
+
+  BRACKET at ±250 yr:  30.8%  to  67.3%
+  (strict to broad null model)
+
+  Center-only matches at ±250 yr:
+    Aries         × winter_solstice   →  7,231 BC  ←  Bond 6 (Δ=219 yr)
+    Taurus        × winter_solstice   →  9,594 BC  ←  YD termination (Δ=156 yr)
+    Gemini        × spring_equinox    →  5,463 BC  ←  Late cluster (BlackSea+Kikai) (Δ=37 yr)
+    Gemini        × winter_solstice   → 11,906 BC  ←  Older Dryas (Δ=169 yr)
+    Leo           × spring_equinox    →  9,175 BC  ←  PBO / Bond 8 / MWP-1B (Δ=225 yr)
+    Leo           × winter_solstice   → 15,618 BC  ←  Bonneville Flood (Δ=68 yr)
+    Virgo         × spring_equinox    → 12,035 BC  ←  Older Dryas (Δ=40 yr)
+    Virgo         × summer_solstice   →  5,592 BC  ←  Mazama VEI 7 (Δ=188 yr)
+    Libra         × spring_equinox    → 14,430 BC  ←  Heinrich Event 1 (Δ=180 yr)
+    Scorpius      × spring_equinox    → 15,503 BC  ←  Bonneville Flood (Δ=47 yr)
+    Ophiuchus     × summer_solstice   →  9,973 BC  ←  YD termination (Δ=223 yr)
+    Sagittarius   × summer_solstice   → 11,835 BC  ←  Older Dryas (Δ=240 yr)
+    Sagittarius   × autumn_equinox    →  5,392 BC  ←  Late cluster (BlackSea+Kikai) (Δ=108 yr)
+    Capricornus   × summer_solstice   → 14,029 BC  ←  Heinrich Event 1 (Δ=221 yr)
+    Capricornus   × autumn_equinox    →  7,586 BC  ←  Mammoth mainland extinction (Δ=114 yr)
+    Aquarius      × autumn_equinox    →  9,447 BC  ←  PBO / Bond 8 / MWP-1B (Δ=47 yr)
+
+  Sweatman: vulture = Sagittarius, summer_solstice
+    SS at 10,950 BC → λ = 270.9° (J2000)
+    Sagittarius ecliptic range: 266.5°–300.0°
+    Sagittarius date window: 10,635–13,034 BC (center: 11,835 BC)
+
+========================================================================
+EXPERIMENT 2: EXACT RANK-SUM TEST (Visual Similarity)
+========================================================================
+
+  6 animals, each ranked against 44 visible constellations.
+  Sweatman's ranks: [1, 1, 1, 4, 5, 6]
+  Sweatman's rank-sum = 18
+
+  Expected rank-sum under null: 135.0 ± 31.1
+  Sweatman's rank-sum: 18  (z = -3.76)
+  Exact P(sum ≤ 18) = 2.558324e-06
+  ≈ 1 in 390,881
+
+  Without-replacement robustness check:
+    Distinct constellations, independent ranks: same P (ranks are independent)
+    Distinct rank values: min possible sum = 21 > 18
+    → Sweatman's sum of 18 (with three rank-1 ties) is impossible
+      under a distinct-ranks null. The with-replacement model is the natural
+      permissive null under independent per-animal rankings.
+
+========================================================================
+EXPERIMENT 3: JOINT PROBABILITY (independence assumption)
+========================================================================
+
+  P(joint) = P(anchor match) × P(rank-sum ≤ 18)
+  NOTE: This assumes the anchor assignment and the visual rankings are
+  independent. If ranking was influenced by the desired date outcome,
+  the true joint probability is higher (less significant).
+
+  ±100 yr:
+    Strict anchor:  0.115 × 2.56e-06 = 2.95e-07  (≈ 1 in 3,387,635)
+    Broad anchor:   0.654 × 2.56e-06 = 1.67e-06  (≈ 1 in 597,818)
+
+  ±250 yr:
+    Strict anchor:  0.308 × 2.56e-06 = 7.87e-07  (≈ 1 in 1,270,363)
+    Broad anchor:   0.673 × 2.56e-06 = 1.72e-06  (≈ 1 in 580,737)
+
+  ±500 yr:
+    Strict anchor:  0.423 × 2.56e-06 = 1.08e-06  (≈ 1 in 923,900)
+    Broad anchor:   0.712 × 2.56e-06 = 1.82e-06  (≈ 1 in 549,346)
+
+
+========================================================================
+EXPERIMENT 4: SENSITIVITY ANALYSIS (center-only anchor)
+========================================================================
+
+  Scenario                            | ± 50 | ±100 | ±150 | ±200 | ±250 | ±300 | ±400 | ±500
+  ---------------------------------------------------------------------------------------------
+  All events, all cardinals           |   8% |  12% |  15% |  21% |  31% |  35% |  38% |  42%
+  All events, SS only                 |   0% |   8% |   8% |   8% |  31% |  38% |  54% |  54%
+  Major events, all cardinals         |   4% |   4% |   4% |  10% |  15% |  15% |  21% |  21%
+  Major events, SS only               |   0% |   0% |   0% |   8% |  23% |  23% |  31% |  31%
+
+========================================================================
+EXPERIMENT 5: CATALOG ROBUSTNESS SWEEP
+========================================================================
+
+  500 perturbed catalogs. Each trial: drop 0–3 events + shift dates.
+  Anchor test: center-only at ±250 yr, all 13 constellations × 4 cardinals.
+
+  Results across 500 perturbed catalogs (center-only, ±250 yr):
+    Mean P(anchor hit):   25.9%
+    Median:               26.9%
+    5th percentile:       17.3%
+    95th percentile:      32.7%
+    Min:                  9.6%
+    Max:                  38.5%
+
+  The anchor result remains non-rare across a wide range of
+  perturbed catalog assumptions.
+
+========================================================================
+EXPERIMENT 6: RANK-SUM DECOMPOSITION (top-3 vs bottom-3)
+========================================================================
+
+  All 6 ranks: [1, 1, 1, 4, 5, 6]  →  sum = 18
+  Top 3:       [1, 1, 1]  →  sum = 3
+  Bottom 3:    [4, 5, 6]  →  sum = 15
+
+  Top 3:    P(sum ≤ 3) = 1.173929e-05  (≈ 1 in 85,184)
+            = 1/44³ = 1/85,184
+  Bottom 3: P(sum ≤ 15) = 5.341379e-03  (≈ 1 in 187)
+            (brute-force check: 455/85,184 = 5.341379e-03)
+  All 6:    P(sum ≤ 18) = 2.558324e-06  (≈ 1 in 390,881)
+
+  Interpretation:
+    The top 3 mappings (scorpion, canid, Ophiuchus) contribute a factor of
+    1 in 85,184 — genuinely rare. These are visually compelling matches.
+
+    The bottom 3 (Pisces, Gemini, Virgo) contribute only 1 in 187.
+    At conventional significance thresholds, the bottom 3 alone would not
+    reject the null hypothesis.
+
+    The total significance (390,881) is overwhelmingly driven by
+    three mappings. Half the evidence base is statistically ordinary.
+
+========================================================================
+EXPERIMENT 7: LEAVE-ONE-EVENT-OUT INFLUENCE ANALYSIS
+========================================================================
+
+  Remove each event cluster, recompute center-only anchor at ±250 yr.
+
+  Dropped event                                  Hits  P(hit)  Δ from baseline
+  ---------------------------------------------  ----  ------  ---------------
+  Older Dryas                                     13   25.0%   -5.8% ▼
+  Bonneville Flood                                14   26.9%   -3.8% ▼
+  Heinrich Event 1                                14   26.9%   -3.8% ▼
+  PBO / Bond 8 / MWP-1B                           14   26.9%   -3.8% ▼
+  Late cluster (BlackSea+Kikai)                   14   26.9%   -3.8% ▼
+  YD termination                                  15   28.8%   -1.9% ▼
+  Bond 6                                          15   28.8%   -1.9% ▼
+  LGM peak                                        16   30.8%   +0.0% ·
+  Bølling-Allerød + MWP-1A                        16   30.8%   +0.0% ·
+  YD cluster (Laacher+YD+YDIH)                    16   30.8%   +0.0% ·
+  Bond 7                                          16   30.8%   +0.0% ·
+  Mammoth mainland extinction                     16   30.8%   +0.0% ·
+  8.2ka cluster (Agassiz+Storegga)                16   30.8%   +0.0% ·
+  Mazama VEI 7                                    16   30.8%   +0.0% ·
+  BASELINE (all events)                           16   30.8%
+
+  Most influential event to remove: Older Dryas
+    → P drops from 30.8% to 25.0%
+    Removing it loses 3 anchor matches.
+
+========================================================================
+EXPERIMENT 8: MULTIVERSE / FORKING-PATHS ANALYSIS
+========================================================================
+
+  Enumerate all defensible analyst choices. Report the distribution
+  of joint probabilities across the multiverse.
+
+  Total paths in multiverse: 128
+  Paths with p_joint > 0:    124
+
+  Joint probability distribution (across all paths where p > 0):
+    Min:    9.84e-08  (≈ 1 in 10,162,905)
+    Median: 1.85e-06  (≈ 1 in 541,392)
+    Mean:   2.65e-06  (≈ 1 in 377,896)
+    Max:    9.03e-06  (≈ 1 in 110,739)
+
+  PRIMARY multiverse (anchor × tolerance × catalog × cardinal, all 6 animals):
+    32 paths, 31 with P > 0
+    Joint P range: 9.84e-08 to 1.97e-06
+    Median: 9.35e-07
+  EXTENDED multiverse (adds animal-dropping forks):
+    96 additional paths, 93 with P > 0
+    Joint P range: 1.85e-07 to 9.03e-06
+
+  Sweatman's path:
+    SS only, all events, ±250 yr, center anchor, all 6 animals
+    P(joint) = 7.87e-07  (≈ 1 in 1,270,363)
+    26/124 paths are as or more significant
+    (21.0% of the full multiverse)
+    13/31 primary paths are as or more significant
+    (41.9% of primary multiverse)
+
+  Most significant path:
+    All 4, Major only, ±100 yr, center, All 6 (sum=18)
+    P = 9.84e-08  (≈ 1 in 10,162,905)
+  Least significant path:
+    SS only, All events, ±100 yr, window, Top 3 (sum=3)
+    P = 9.03e-06  (≈ 1 in 110,739)
+
+  Interpretation:
+    The quoted significance depends heavily on analyst choices. Not all paths
+    are equally defensible: dropping animals post hoc (extended multiverse) is
+    a stronger degree of freedom than choosing center vs. window anchor
+    (primary multiverse). Even within the primary multiverse (32 paths),
+    the range spans 9.8e-08 to 2.0e-06. The reported
+    p-value should be understood as conditional on one analytical path.
+
+========================================================================
+EXPERIMENT 9: COVERAGE FRACTION
+========================================================================
+
+  Window: 20,000–5,000 BC (15,000 years)
+  What fraction of this window lies within ±tolerance of at least one event?
+
+  ±100 yr:  18.7% of the window is covered
+  ±250 yr:  42.5% of the window is covered
+  ±500 yr:  71.2% of the window is covered
+
+  At ±250 yr, 42.5% of all years between 20,000 and 5,000 BC are
+  within 250 years of a notable event. A random date drawn from this
+  window has a 42.5% chance of being 'near something notable.'
+
+========================================================================
+EXPERIMENT 10: CIRCULAR-SHIFT CATALOG TEST
+========================================================================
+
+  1000 circular shifts within 20,000–5,000 BC (15,000 yr window).
+  Events wrap modulo window length. Preserves spacing and count.
+
+  Results across 1000 shifted catalogs (center-only, ±250 yr):
+    Baseline (real):  30.8%
+    Shifted mean:     24.5%
+    Shifted median:   25.0%
+    Shifted min:      7.7%
+    Shifted max:      40.4%
+    5th–95th pctile:  13.5%–34.6%
+
+  23.9% of random shifts produce P ≥ baseline (30.8%).
+  The real catalog's event placement is typical relative to random shifts.
+
+========================================================================
+EXPERIMENT 11: LEAVE-ONE-ANIMAL-OUT INFLUENCE ANALYSIS
+========================================================================
+
+  Baseline: 6 animals, sum = 18, P = 2.5583e-06 (≈ 1 in 390,881)
+
+  Dropped animal             Rank  Remaining sum  P(remaining)      1-in          Δ significance
+  -------------------------  ----  -------------  ------------  ----------  ----------------
+  Scorpion                     1             17    3.7522e-05      26,651        14.7× weaker
+  Wolf/dog (canid)             1             17    3.7522e-05      26,651        14.7× weaker
+  Tall bird + snake            1             17    3.7522e-05      26,651        14.7× weaker
+  Bending bird                 4             14    1.2139e-05      82,376         4.7× weaker
+  Ibex/quadruped               5             13    7.8040e-06     128,140         3.1× weaker
+  Frog/bear                    6             12    4.8024e-06     208,228         1.9× weaker
+
+  Most critical animal: Scorpion (rank 1)
+    Removing it makes the result 14.7× weaker.
+  Least critical animal: Frog/bear (rank 6)
+    Removing it makes the result only 1.9× weaker.
+
+========================================================================
+EXPERIMENT 12: RANKING SENSITIVITY
+========================================================================
+
+  Alternative ranking schemes for the 6 Pillar 43 animals.
+  Tests whether the conclusion depends on one exact ranking vector.
+
+  Scheme                      Ranks               Sum   P(sum≤S)      1-in     Top3 P       Bot3 P
+  --------------------------  ------------------  ---  ----------  ---------  -----------  -----------
+  Sweatman original           [1, 1, 1, 4, 5, 6]   18    2.56e-06    390,881     1.17e-05    5.34e-03
+  Conservative (+1 each)      [2, 2, 2, 5, 6, 7]   24    1.85e-05     53,912     2.35e-04    9.58e-03
+  Skeptical (top3 at 3)       [3, 3, 3, 4, 5, 6]   24    1.85e-05     53,912     9.86e-04    5.34e-03
+  Mixed (top3 vary)           [1, 2, 3, 4, 5, 6]   21    7.48e-06    133,722     2.35e-04    5.34e-03
+  Degraded (top3 at 5)        [5, 5, 5, 4, 5, 6]   30    8.18e-05     12,221     4.27e-03    6.57e-03
+  Generous (bot3 better)      [1, 1, 1, 2, 3, 4]   12    1.27e-07  7,853,154     1.17e-05    9.86e-04
+
+  Key question: do the same 3 animals (scorpion, canid, Ophiuchus)
+  remain the strongest across ranking schemes?
+  Answer: by construction, yes — these are always the lowest-ranked trio
+  in every scheme except 'Degraded' and 'Generous'.
+
+  Stability of overall significance:
+    Range: 1.27e-07 to 8.18e-05
+    (12,221× to 7,853,154×)
+    Even under 'Conservative' ranks (+1 each), significance drops
+    from 1 in 390,881 to 1 in 53,912.
+
+========================================================================
+EXPERIMENT 13: ANIMAL-IDENTITY PERMUTATION TEST
+========================================================================
+
+  Observed ranks: [1, 1, 1, 4, 5, 6]
+  3 animals share the top rank (1)
+  Claimed top-3: Scorpion, Wolf/dog (canid), Tall bird + snake
+
+  Under random permutation of rank assignments:
+    P(specific trio gets all rank-1 slots) = C(3,3)/C(6,3)
+    = 1/20 = 5.0%
+
+  Monte Carlo (100,000 trials): 5087/100,000 = 5.1%
+  (matches analytical: 5.0%)
+
+  Conditional on a rank pattern with three rank-1 slots, the probability
+  that the specific claimed trio (scorpion, canid, Ophiuchus) occupies
+  them is 5%. This is mildly informative but not striking on
+  its own. Its value is as a complement to the decomposition and
+  leave-one-animal-out results.
+
+========================================================================
+SUMMARY
+========================================================================
+
+  Sweatman claims statistical significance at ~1 in 1.4 million.
+  We decompose and re-evaluate this claim across 13 experiments:
+
+  1. DATE COINCIDENCE: Strict 30.8%, Broad 67.3%
+  2. VISUAL SIMILARITY: P = 2.5583e-06 (≈ 1 in 390,881)
+  3. JOINT: Strict 7.87e-07, Broad 1.72e-06
+  4. SENSITIVITY: Most conservative scenario still gives 23% at ±250 yr.
+  5. CATALOG ROBUSTNESS: 9.6%–38.5% across 500 catalogs.
+  6. DECOMPOSITION: Top 3 = 1 in 85,184. Bottom 3 = 1 in 187.
+  7. LEAVE-ONE-EVENT-OUT: Min anchor P = 25.0%.
+  8. MULTIVERSE: Primary 9.8e-08–2.0e-06; 42% of primary paths ≤ Sweatman's.
+  9. COVERAGE: 42.5% of 20,000–5,000 BC is near an event.
+  10. CIRCULAR-SHIFT: 24% of shifts ≥ baseline.
+  11. ANIMAL-LOO: Most critical = Scorpion (14.7× impact).
+  12. RANKING SENSITIVITY: Conservative (+1) drops to 1 in 53,912.
+  13. IDENTITY PERMUTATION: P(specific trio gets all rank-1 slots) = 5%.
+
+  KEY FINDINGS:
+  - The date coincidence is weak: 43% of the era is near something notable.
+  - The visual similarity is carried by 3 of 6 mappings (1 in 85,184 vs 1 in 187).
+  - Those 3 mappings are self-scored and have never been blindly validated.
+  - The top-3 dominance pattern is stable across conservative ranking adjustments.
+  - The identity of the top-3 trio has a 5% chance under random assignment.
+  - Significance varies by 2 orders of magnitude across defensible analyst choices.
+  - A blind ranking experiment would be the decisive test.
+
+Generating figures...
+  Saved output/fig1_timeline.png
+  Saved output/fig2_sensitivity.png
+  Saved output/fig3_rank_sum.png
+  Saved output/fig4_anchor_bracket.png
+  Saved output/fig5_catalog_sweep.png
+  Saved output/results.json
+
+Done.
