@@ -23,7 +23,7 @@ This repository contains an independent statistical decomposition of that claim 
 
 ```
 gobekli_statistical_test.py    Main analysis script (13 experiments, ~1,500 lines)
-paper.pdf                      Full paper
+gobekli-pillar43-statistics_paper.pdf                      Full paper
 output/
   run_log.txt                  Complete console output from the official run
   results.json                 Full numerical results (including multiverse path table)
