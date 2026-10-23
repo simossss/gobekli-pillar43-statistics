@@ -4,11 +4,13 @@
 
 Simone Pomposi — Independent Researcher
 
-Zenodo v1 (deposited PDF): [10.5281/zenodo.20364947](https://doi.org/10.5281/zenodo.20364947)
+Zenodo v1 (deposited PDF): [10.5281/zenodo.20364947](https://doi.org/10.5281/zenodo.20364947) — [`gobekli-pillar43-statistics_paper.pdf`](gobekli-pillar43-statistics_paper.pdf)
 
-Corrected manuscript (not yet a Zenodo version): [`paper/gobekli-pillar43-statistics.md`](paper/gobekli-pillar43-statistics.md)
+Corrected manuscript: [`paper/gobekli-pillar43-statistics.md`](paper/gobekli-pillar43-statistics.md)
 
-The PDF in this repository is the v1 deposit. It has not been rebuilt. Nothing in this revision was uploaded to Zenodo.
+PDF built from that manuscript: [`gobekli-pillar43-statistics_paper_v2.pdf`](gobekli-pillar43-statistics_paper_v2.pdf)
+
+The v2 PDF is a local build for review. It includes the five figures the manuscript cites (`output/fig1_timeline.png` through `output/fig5_catalog_sweep.png`; Figure 4 is `output/fig4_anchor_bracket.png`). It has not been uploaded to Zenodo.
 
 ---
 
@@ -26,7 +28,7 @@ This repository is an independent decomposition of that claim. The numbers below
 
 ## Changelog of figures intended for a Zenodo v2
 
-v1 is the deposited PDF and the previous `output/results.json`. “This run” is the committed recompute. Do not treat the v1 PDF as carrying these figures.
+v1 is the deposited PDF and the previous `output/results.json`. “This run” is the committed recompute. The v1 PDF does not carry these figures. [`gobekli-pillar43-statistics_paper_v2.pdf`](gobekli-pillar43-statistics_paper_v2.pdf) is the PDF of the corrected manuscript.
 
 | Quantity | Zenodo v1 | This run |
 |----------|-----------|----------|
@@ -53,14 +55,18 @@ v1 is the deposited PDF and the previous `output/results.json`. “This run” i
 | Pisces/Aries junction | 24.4° | **28.687°** |
 | Rank-sum, bottom 3, animal leave-one-out, Table 6 | — | unchanged |
 
-Still open before any Zenodo upload: a Stellarium residual table, an IntCal age for the mammoth cluster, a rebuilt PDF, and record metadata (related identifiers, keywords). Details are in the manuscript changelog and the pull request.
+Still open before any Zenodo upload: a Stellarium residual table, an IntCal age for the mammoth cluster, and record metadata (related identifiers, keywords). The corrected manuscript now has a repository PDF, `gobekli-pillar43-statistics_paper_v2.pdf`. Details are in the manuscript changelog.
 
 ## Repository contents
 
 ```
-paper/gobekli-pillar43-statistics.md   Corrected manuscript source
-gobekli_statistical_test.py            Analysis script (13 experiments)
-gobekli-pillar43-statistics_paper.pdf  Zenodo v1 PDF (not regenerated)
+paper/gobekli-pillar43-statistics.md        Corrected manuscript source
+gobekli_statistical_test.py                 Analysis script (13 experiments)
+gobekli-pillar43-statistics_paper_v2.pdf    PDF built from the corrected manuscript
+gobekli-pillar43-statistics_paper.pdf       Zenodo v1 PDF (unchanged deposit)
+scripts/build_pdf.sh                        Rebuild the v2 PDF (pandoc + XeLaTeX)
+scripts/pdf_header.tex                      Page style, captions, and table spacing
+scripts/pdf_table_widths.lua                Wrapping column widths for the manuscript tables
 output/
   run_log.txt                  Console log of the corrected run
   results.json                 Numerical results, including the multiverse table
@@ -81,6 +87,16 @@ python gobekli_statistical_test.py
 ```
 
 The script writes `output/run_log.txt`, `output/results.json`, and the five figures. Constellation boundaries, the event catalog, and Sweatman’s ranks are in the script. Seed 42.
+
+## Building the v2 PDF
+
+`scripts/build_pdf.sh` reads `paper/gobekli-pillar43-statistics.md` and writes `gobekli-pillar43-statistics_paper_v2.pdf`. It does not edit the manuscript. Where the manuscript cites Figure 1–5, the build inserts the matching file from `output/`.
+
+Requirements: [pandoc](https://pandoc.org/) and XeLaTeX (Debian/Ubuntu: `pandoc`, `texlive-xetex`, `texlive-latex-recommended`, `texlive-latex-extra`, `texlive-fonts-recommended`, `texlive-science`).
+
+```bash
+scripts/build_pdf.sh
+```
 
 ## The 13 experiments
 
