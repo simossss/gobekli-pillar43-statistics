@@ -22,7 +22,17 @@ Thirteen analyses:
   13. Animal-identity permutation — does it matter WHICH animals carry the signal?
 
 Author: Simone Pomposi, Independent Researcher
-Date: 2026-04
+Date: 2026-04; accuracy corrections 2026-10-23 (Zenodo v2 draft, not uploaded)
+
+v2 corrections in this file:
+  - constellation_date_range() returns one short interval (no branch-cut wrap)
+  - Pisces/Aries ecliptic junction set to 28.687° (IAU boundary ∩ J2000 ecliptic)
+  - Heinrich 1 and Mazama dates follow Hemming (2004) and Zdanowicz et al. (1999)
+  - mammoth 7700 BCE kept only as an uncalibrated placeholder (Kuzmin & Orlova 2004 are 14C ages)
+  - "major-only" renamed to a half-width precision filter (not event magnitude)
+  - multiverse validity filter: the observed Sagittarius × summer-solstice reading must be a hit
+  - selection-adjusted top-3 null reported beside the pre-specified 1/44^3 figure
+  - Sweatman & Gerogiorgis (2025) headline evaluated as rank-sum × 2/7 (no date term)
 """
 
 import json
@@ -47,7 +57,12 @@ OUTPUT_DIR = Path("output")
 # ──────────────────────────────────────────────────────────────────────
 
 ECLIPTIC_CONSTELLATIONS = [
-    {"name": "Aries",       "lam_start": 24.4,  "lam_end":  53.5},
+    # Pisces/Aries junction: v1 used 24.4°. David Asher's intersection of the IAU
+    # (B1875) boundary with the J2000 ecliptic is 28.687° (review rounding ~28.8°).
+    # Other junctions stay at the v1 one-decimal table so this revision does not
+    # retune every anchor date. A full boundary refresh belongs with a Stellarium
+    # residual table, which is not run here.
+    {"name": "Aries",       "lam_start": 28.687, "lam_end":  53.5},
     {"name": "Taurus",      "lam_start": 53.5,  "lam_end":  90.4},
     {"name": "Gemini",      "lam_start": 90.4,  "lam_end": 118.1},
     {"name": "Cancer",      "lam_start": 118.1, "lam_end": 138.1},
@@ -59,10 +74,20 @@ ECLIPTIC_CONSTELLATIONS = [
     {"name": "Sagittarius", "lam_start": 266.5, "lam_end": 300.0},
     {"name": "Capricornus", "lam_start": 300.0, "lam_end": 327.8},
     {"name": "Aquarius",    "lam_start": 327.8, "lam_end": 352.0},
-    {"name": "Pisces",      "lam_start": 352.0, "lam_end": 384.4},  # wraps past 360
+    {"name": "Pisces",      "lam_start": 352.0, "lam_end": 388.687},  # wraps; end = 360+28.687
 ]
 
-N_VISIBLE_CONSTELLATIONS = 44  # Sweatman & Gerogiorgis (2025): 44 visible from GT
+# Sweatman & Gerogiorgis (2025): Ptolemy's 48 minus four southern constellations
+# they treat as not visible (Canis Major, Lepus, Eridanus, Argo Navis). This is
+# not a census of every modern constellation above the horizon at ~37°N.
+N_VISIBLE_CONSTELLATIONS = 44
+PISCES_ARIES_BOUNDARY_DEG = 28.687
+PRECISION_FILTER_HALF_WIDTH_YR = 250  # dating precision, not event magnitude
+ANALYSIS_WINDOW_START_BC = 20_000
+ANALYSIS_WINDOW_END_BC = 5_000
+# Rank-sum probability × 2/7. ×2 = top-row reversal symmetry; ÷7 = the 2019
+# spatial-correlation allowance. The product contains no paleoclimatic date term.
+SWEATMAN_SYMMETRY_SPATIAL_FACTOR = 2.0 / 7.0
 
 # ──────────────────────────────────────────────────────────────────────
 #  SWEATMAN'S PILLAR 43 MAPPINGS
@@ -91,21 +116,46 @@ SWEATMAN_DATE_BC = 10_950
 #  PALEOCLIMATIC EVENT CATALOG
 # ──────────────────────────────────────────────────────────────────────
 
+# half_width_yr is the catalog's dating uncertainty. Primary match tests do NOT
+# use it: they apply a uniform tolerance override (±100/200/250/300 yr).
+# The precision filter keeps clusters with half_width_yr ≤ 250. That is a
+# precision cut, not a magnitude cut ("major-only" in v1 was this same cut).
+# age_basis records whether date_bc is a calendar year from the cited source.
 EVENT_CLUSTERS = [
-    {"name": "LGM peak",                        "date_bc": 19050, "half_width_yr": 1000},
-    {"name": "Bonneville Flood",                 "date_bc": 15550, "half_width_yr":  500},
-    {"name": "Heinrich Event 1",                 "date_bc": 14250, "half_width_yr":  500},
-    {"name": "Bølling-Allerød + MWP-1A",         "date_bc": 12700, "half_width_yr":  200},
-    {"name": "Older Dryas",                      "date_bc": 12075, "half_width_yr":  200},
-    {"name": "YD cluster (Laacher+YD+YDIH)",     "date_bc": 10900, "half_width_yr":  250},
-    {"name": "YD termination",                   "date_bc":  9750, "half_width_yr":  100},
-    {"name": "PBO / Bond 8 / MWP-1B",           "date_bc":  9400, "half_width_yr":  200},
-    {"name": "Bond 7",                           "date_bc":  8350, "half_width_yr":  500},
-    {"name": "Mammoth mainland extinction",      "date_bc":  7700, "half_width_yr":  300},
-    {"name": "Bond 6",                           "date_bc":  7450, "half_width_yr":  500},
-    {"name": "8.2ka cluster (Agassiz+Storegga)",  "date_bc":  6300, "half_width_yr":  300},
-    {"name": "Mazama VEI 7",                     "date_bc":  5780, "half_width_yr":  200},
-    {"name": "Late cluster (BlackSea+Kikai)",    "date_bc":  5500, "half_width_yr":  400},
+    {"name": "LGM peak",                        "date_bc": 19050, "half_width_yr": 1000,
+     "age_basis": "v1_calendar"},
+    {"name": "Bonneville Flood",                 "date_bc": 15550, "half_width_yr":  500,
+     "age_basis": "v1_calendar"},
+    # Hemming (2004) Table 4: H1 = 16,800 calendar years (14,200 14C + 2,600).
+    # 16,800 cal yr BP (1950 convention) = 14,850 BCE. v1 used 14,250 BCE.
+    {"name": "Heinrich Event 1",                 "date_bc": 14850, "half_width_yr":  500,
+     "age_basis": "hemming_2004_calendar_bp_1950"},
+    {"name": "Bølling-Allerød + MWP-1A",         "date_bc": 12700, "half_width_yr":  200,
+     "age_basis": "v1_calendar"},
+    {"name": "Older Dryas",                      "date_bc": 12075, "half_width_yr":  200,
+     "age_basis": "v1_calendar"},
+    {"name": "YD cluster (Laacher+YD+YDIH)",     "date_bc": 10900, "half_width_yr":  250,
+     "age_basis": "v1_calendar"},
+    {"name": "YD termination",                   "date_bc":  9750, "half_width_yr":  100,
+     "age_basis": "v1_calendar"},
+    {"name": "PBO / Bond 8 / MWP-1B",           "date_bc":  9400, "half_width_yr":  200,
+     "age_basis": "v1_calendar"},
+    {"name": "Bond 7",                           "date_bc":  8350, "half_width_yr":  500,
+     "age_basis": "v1_calendar"},
+    # Kuzmin & Orlova (2004) give radiocarbon ages (mainland extinction ca. 9700 14C BP;
+    # Wrangel survival ca. 7700–3700 14C BP), not a calibrated BCE date. v1's 7700 BCE
+    # is retained as an analyst placeholder and is NOT an IntCal calendar age.
+    {"name": "Mammoth extinction (N. Asia, 14C placeholder)", "date_bc": 7700, "half_width_yr": 300,
+     "age_basis": "uncalibrated_14c_placeholder_not_calendar"},
+    {"name": "Bond 6",                           "date_bc":  7450, "half_width_yr":  500,
+     "age_basis": "v1_calendar"},
+    {"name": "8.2ka cluster (Agassiz+Storegga)",  "date_bc":  6300, "half_width_yr":  300,
+     "age_basis": "v1_calendar"},
+    # Zdanowicz et al. (1999): 7627 ± 150 cal yr BP = 5677 ± 150 BCE. v1 used 5780 ± 200.
+    {"name": "Mazama VEI 7",                     "date_bc":  5677, "half_width_yr":  150,
+     "age_basis": "zdanowicz_1999_calendrical"},
+    {"name": "Late cluster (BlackSea+Kikai)",    "date_bc":  5500, "half_width_yr":  400,
+     "age_basis": "v1_calendar"},
 ]
 
 
@@ -144,25 +194,29 @@ def date_bc_from_ecliptic_longitude(lam_j2000: float, cardinal: str = "summer_so
 
 def constellation_date_range(constellation: dict, cardinal: str = "summer_solstice"):
     """
-    For a given ecliptic constellation, return (date_min_bc, date_max_bc):
-    the range of years BC when the Sun at the given cardinal day fell within
-    the constellation's ecliptic boundaries.
+    Years BC when the cardinal-day Sun's J2000 ecliptic longitude lies inside
+    the constellation. Returns (more_recent_bc, more_ancient_bc).
 
-    date_min_bc is the more recent boundary, date_max_bc the more ancient.
+    The interval is centered on constellation_center_date and has length
+    Δλ / precession rate. Longitude is stored so that lam_end > lam_start
+    even when the constellation crosses 0° (Pisces).
+
+    v1 folded each endpoint into [3000, ~28000] BC separately and took min/max.
+    Four constellation × cardinal pairs straddle that branch cut (Taurus ×
+    spring equinox, Leo × summer solstice, Libra × autumn equinox, Aquarius ×
+    winter solstice). Their reported windows jumped by almost one precession
+    period and produced spurious broad-model hits (35/52 instead of 31/52 on
+    the v1 catalog).
     """
-    lam_s = constellation["lam_start"]
-    lam_e = constellation["lam_end"]
-    if lam_e > 360:
-        lam_e_wrapped = lam_e - 360
-        d1_s = date_bc_from_ecliptic_longitude(lam_s, cardinal)
-        d1_e = date_bc_from_ecliptic_longitude(360.0, cardinal)
-        d2_s = date_bc_from_ecliptic_longitude(0.0, cardinal)
-        d2_e = date_bc_from_ecliptic_longitude(lam_e_wrapped, cardinal)
-        all_d = [d1_s, d1_e, d2_s, d2_e]
-        return (min(all_d), max(all_d))
-    d_at_start = date_bc_from_ecliptic_longitude(lam_s, cardinal)
-    d_at_end = date_bc_from_ecliptic_longitude(lam_e, cardinal)
-    return (min(d_at_start, d_at_end), max(d_at_start, d_at_end))
+    lam_s = float(constellation["lam_start"])
+    lam_e = float(constellation["lam_end"])
+    width_deg = lam_e - lam_s
+    if width_deg <= 0:
+        width_deg += 360.0
+    width_yr = width_deg / PRECESSION_RATE_DEG_PER_YR
+    d_center = constellation_center_date(constellation, cardinal)
+    half = width_yr / 2.0
+    return (d_center - half, d_center + half)
 
 
 def constellation_center_date(constellation: dict, cardinal: str = "summer_solstice") -> float:
@@ -171,6 +225,73 @@ def constellation_center_date(constellation: dict, cardinal: str = "summer_solst
     if lam_mid > 360:
         lam_mid -= 360
     return date_bc_from_ecliptic_longitude(lam_mid, cardinal)
+
+
+def precision_filtered_events(events, max_half_width=PRECISION_FILTER_HALF_WIDTH_YR):
+    """Clusters with half-width ≤ max_half_width (dating precision, not magnitude)."""
+    return [e for e in events if e["half_width_yr"] <= max_half_width]
+
+
+def clusters_closer_than(events, years=500):
+    """Pairs of catalog centers less than `years` apart. The 14 clusters are not an independent partition."""
+    pairs = []
+    for i in range(len(events)):
+        for j in range(i + 1, len(events)):
+            gap = abs(events[i]["date_bc"] - events[j]["date_bc"])
+            if gap < years:
+                pairs.append({
+                    "a": events[i]["name"],
+                    "b": events[j]["name"],
+                    "gap_yr": gap,
+                })
+    return pairs
+
+
+def observed_anchor_is_hit(events, tolerance, anchor_model):
+    """
+    Whether Sweatman's observed reading (Sagittarius × summer solstice) is a hit
+    under this path's catalog, tolerance, and anchor model.
+
+    Center model: the Sagittarius midpoint date falls within `tolerance` of a
+    catalogued event. Window model: the Sagittarius date interval overlaps an
+    event tolerance window. Animal subset is irrelevant to this date check.
+    """
+    sag = next(c for c in ECLIPTIC_CONSTELLATIONS if c["name"] == SWEATMAN_ANCHOR)
+    if anchor_model == "center":
+        d_center = constellation_center_date(sag, SWEATMAN_CARDINAL)
+        matched, name, dist = date_matches_any_event(
+            d_center, events, tolerance_override=tolerance)
+        return matched, {
+            "model": "center",
+            "date_bc": d_center,
+            "event": name,
+            "distance_yr": dist,
+        }
+    d_min, d_max = constellation_date_range(sag, SWEATMAN_CARDINAL)
+    matched, name = window_overlaps_any_event(
+        d_min, d_max, events, tolerance_override=tolerance)
+    return matched, {
+        "model": "window",
+        "date_min_bc": d_min,
+        "date_max_bc": d_max,
+        "event": name,
+    }
+
+
+def selection_adjusted_at_least_k_rank1(n_animals, n_constellations, k):
+    """
+    Exact P(at least k of n_animals independent uniform ranks on {1..N} equal 1).
+
+    When the k smallest observed ranks are all 1, this is the sort-then-pick
+    null for that top group: P(sum of the k smallest ranks ≤ k). It is not
+    equal to (1/N)^k, which is the probability for k pre-specified animals.
+    """
+    n = n_animals
+    N = n_constellations
+    count = 0
+    for i in range(k, n + 1):
+        count += comb(n, i) * ((N - 1) ** (n - i))
+    return count / (N ** n)
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -313,6 +434,47 @@ def run_anchor_test(events, tolerance_values=(100, 250, 500)):
         print(f"    {d['constellation']:13s} × {d['cardinal']:17s} → "
               f"{d['date_bc']:>6,} BC  ←  {d['event']} (Δ={d['distance_yr']} yr)")
 
+    # Domain of the discrete anchor null, and a hard check that no window
+    # still spans a precession-cycle branch cut.
+    n_in_window = 0
+    cardinals_all = ["spring_equinox", "summer_solstice", "autumn_equinox", "winter_solstice"]
+    for const in ECLIPTIC_CONSTELLATIONS:
+        width_deg = float(const["lam_end"]) - float(const["lam_start"])
+        if width_deg <= 0:
+            width_deg += 360.0
+        expected_yr = width_deg / PRECESSION_RATE_DEG_PER_YR
+        for card in cardinals_all:
+            d_center = constellation_center_date(const, card)
+            if ANALYSIS_WINDOW_END_BC <= d_center <= ANALYSIS_WINDOW_START_BC:
+                n_in_window += 1
+            d_min, d_max = constellation_date_range(const, card)
+            span = d_max - d_min
+            if abs(span - expected_yr) > 1.0:
+                raise RuntimeError(
+                    f"constellation_date_range unwrap failed for {const['name']} × {card}: "
+                    f"span {span:.1f} yr vs angular width {expected_yr:.1f} yr"
+                )
+    n_constellations_matched = len({d["constellation"] for d in results[250]["center_details"]})
+    print(f"\n  Center dates inside {ANALYSIS_WINDOW_START_BC:,}–{ANALYSIS_WINDOW_END_BC:,} BC: "
+          f"{n_in_window}/52")
+    print(f"  Distinct constellations among ±250 center hits: {n_constellations_matched}")
+    print("  Date-range unwrap check: all 52 windows match their angular widths.")
+    close_pairs = clusters_closer_than(events, years=500)
+    print(f"  Catalog pairs with centers <500 yr apart (not merged): {len(close_pairs)}")
+    for pair in close_pairs:
+        print(f"    {pair['a']}  ↔  {pair['b']}  (Δ={pair['gap_yr']} yr)")
+    results["meta"] = {
+        "n_centers_in_analysis_window": n_in_window,
+        "n_anchor_combinations": 52,
+        "analysis_window_start_bc": ANALYSIS_WINDOW_START_BC,
+        "analysis_window_end_bc": ANALYSIS_WINDOW_END_BC,
+        "n_constellations_in_center_hits_250": n_constellations_matched,
+        "pisces_aries_boundary_deg": PISCES_ARIES_BOUNDARY_DEG,
+        "close_pairs_lt_500yr": close_pairs,
+        "half_width_used_for_matching": False,
+        "match_uses": "uniform tolerance override; catalog half-width is not the match window",
+    }
+
     # Validate Sweatman's specific case
     print()
     sag = next(c for c in ECLIPTIC_CONSTELLATIONS if c["name"] == "Sagittarius")
@@ -358,6 +520,14 @@ def run_similarity_test():
     print(f"  Exact P(sum ≤ {SWEATMAN_RANK_SUM}) = {p_exact:.6e}")
     print(f"  ≈ 1 in {1/p_exact:,.0f}")
 
+    p_sweatman_style = p_exact * SWEATMAN_SYMMETRY_SPATIAL_FACTOR
+    print()
+    print("  Sweatman & Gerogiorgis (2025) headline factor (no date term):")
+    print(f"    P(rank-sum ≤ {SWEATMAN_RANK_SUM}) × 2/7 = {p_sweatman_style:.6e}")
+    print(f"    ≈ 1 in {1/p_sweatman_style:,.0f}")
+    print("    ×2 = top-row reversal symmetry; ÷7 = 2019 spatial-correlation allowance.")
+    print("    This is the published ~1-in-1.4-million claim. It is not a date×visual joint.")
+
     # Robustness: without-replacement null
     # If we require each animal to map to a DISTINCT constellation, two models arise:
     #
@@ -388,6 +558,10 @@ def run_similarity_test():
         "z_score": round(z_score, 2),
         "p_exact": p_exact,
         "one_in": round(1 / p_exact),
+        "sweatman_factor": SWEATMAN_SYMMETRY_SPATIAL_FACTOR,
+        "p_rank_sum_times_2_over_7": p_sweatman_style,
+        "one_in_rank_sum_times_2_over_7": round(1 / p_sweatman_style),
+        "sweatman_factor_includes_date_term": False,
     }
     return result
 
@@ -454,16 +628,23 @@ def run_sensitivity_analysis(events):
     print("=" * 72)
     print()
 
-    major_events = [e for e in events if e["half_width_yr"] <= 250]
+    precise_events = precision_filtered_events(events)
     tolerances = [50, 100, 150, 200, 250, 300, 400, 500]
     cardinals_ss = ["summer_solstice"]
     cardinals_all = ["spring_equinox", "summer_solstice", "autumn_equinox", "winter_solstice"]
 
+    print(f"  Precision filter: half-width ≤ {PRECISION_FILTER_HALF_WIDTH_YR} yr "
+          f"({len(precise_events)} of {len(events)} clusters).")
+    print("  This selects better-dated events, not larger-magnitude events.")
+    print("  Matching uses the column tolerance, not each cluster's half-width.")
+    print(f"  Precision-filtered clusters: {', '.join(e['name'] for e in precise_events)}")
+    print()
+
     scenarios = [
         ("All events, all cardinals", events, cardinals_all),
         ("All events, SS only", events, cardinals_ss),
-        ("Major events, all cardinals", major_events, cardinals_all),
-        ("Major events, SS only", major_events, cardinals_ss),
+        ("Precision-filtered, all cardinals", precise_events, cardinals_all),
+        ("Precision-filtered, SS only", precise_events, cardinals_ss),
     ]
 
     results = {}
@@ -627,22 +808,42 @@ def run_decomposition():
     p_all6 = exact_rank_sum_probability(6, N, sum(ranks))
     print(f"  All 6:    P(sum ≤ {sum(ranks)}) = {p_all6:.6e}  (≈ 1 in {1/p_all6:,.0f})")
 
+    # The code path above sorts the six ranks and keeps the best three.
+    # (1/44)^3 is the null only if those three animals were pre-specified.
+    # Sort-then-pick of three rank-1s among six animals is a larger event.
+    p_top3_selected = selection_adjusted_at_least_k_rank1(6, N, 3)
+    product = p_top3 * p_bot3
+    print()
+    print(f"  Pre-specified top 3:     P = {p_top3:.6e}  (1 in {1/p_top3:,.0f}) = 1/{N}^3")
+    print(f"  Selection-adjusted top 3: P(≥3 of 6 ranks equal 1) = {p_top3_selected:.6e}"
+          f"  (1 in {1/p_top3_selected:,.0f})")
+    print(f"  P(pre-specified top) × P(bottom) = {product:.6e}")
+    print(f"  P(all 6)                         = {p_all6:.6e}")
+    print("  Those two are not equal. Subgroup rows are diagnostics, not a factorization.")
+
     print(f"""
   Interpretation:
-    The top 3 mappings (scorpion, canid, Ophiuchus) contribute a factor of
-    1 in {N**3:,} — genuinely rare. These are visually compelling matches.
+    If scorpion, canid, and Ophiuchus were pre-specified, their joint rank-1
+    probability is 1 in {N**3:,}. The published analysis ranks all six animals
+    and then highlights the best three, so the matching null is the
+    selection-adjusted figure (1 in {1/p_top3_selected:,.0f}).
 
-    The bottom 3 (Pisces, Gemini, Virgo) contribute only 1 in {1/p_bot3:.0f}.
-    At conventional significance thresholds, the bottom 3 alone would not
-    reject the null hypothesis.
+    The bottom 3 (Pisces, Gemini, Virgo) contribute 1 in {1/p_bot3:.0f}.
+    That still clears a conventional 0.05 threshold, but it carries far less
+    weight than the top three. The canid → Lupus identification is tentative.
 
-    The total significance ({1/p_all6:,.0f}) is overwhelmingly driven by
-    three mappings. Half the evidence base is statistically ordinary.""")
+    P(top) × P(bottom) is not P(all six).""")
 
     return {
         "top3_ranks": top3, "top3_sum": sum(top3), "top3_p": p_top3,
+        "top3_p_definition": "pre-specified trio; equals 1/44^3 for three rank-1s",
+        "top3_selection_adjusted_p": p_top3_selected,
+        "top3_selection_adjusted_one_in": round(1 / p_top3_selected),
+        "top3_selection_definition": "P(at least 3 of 6 independent ranks equal 1), i.e. sort-then-pick of an all-rank-1 top group",
         "bot3_ranks": bot3, "bot3_sum": sum(bot3), "bot3_p": p_bot3,
         "all6_p": p_all6,
+        "product_top_prespecified_times_bottom": product,
+        "product_equals_all6": abs(product - p_all6) < 1e-18,
     }
 
 
@@ -714,33 +915,56 @@ def run_leave_one_out(events):
 #  EXPERIMENT 8: MULTIVERSE / FORKING-PATHS ANALYSIS
 # ──────────────────────────────────────────────────────────────────────
 
+def _path_joint_summary(paths):
+    """Min / median / max of p_joint. Empty input returns null stats."""
+    if not paths:
+        return {"n": 0, "n_zero": 0, "min": None, "median": None, "max": None}
+    arr = np.array([p["p_joint"] for p in paths], dtype=float)
+    return {
+        "n": int(arr.size),
+        "n_zero": int(np.sum(arr == 0)),
+        "min": float(arr.min()),
+        "median": float(np.median(arr)),
+        "max": float(arr.max()),
+    }
+
+
 def run_multiverse(events):
     """
-    Enumerate all reasonable analyst choices and compute the joint probability
-    for each combination. Reports the distribution of results across the
-    multiverse of defensible analytical decisions.
+    Enumerate analyst choices and compute an exploratory joint product for each.
 
     Forking paths:
-      - Cardinal day: SS-only (Sweatman's choice) vs all-4
-      - Event catalog: all 14 clusters vs major-only (half_width ≤ 250 yr)
+      - Cardinal day: SS-only vs all four
+      - Event catalog: all clusters vs precision-filtered (half-width ≤ 250 yr)
       - Tolerance: 100, 200, 250, 300 yr
-      - Animals included: all 6 vs top 5 (drop weakest) vs top 4 vs top 3
+      - Animals included: all 6 vs top 5 / top 4 / top 3 (post-hoc; extended set)
       - Anchor model: center-only vs window-overlap
+
+    Validity filter: a path counts toward "as significant as the reference path"
+    only when the observed reading (Sagittarius × summer solstice) is a hit
+    under that path's catalog, tolerance, and anchor model. Zero-P paths are
+    retained in the disclosure counts; v1 dropped them from the denominator.
     """
     print("\n" + "=" * 72)
     print("EXPERIMENT 8: MULTIVERSE / FORKING-PATHS ANALYSIS")
     print("=" * 72)
     print()
-    print("  Enumerate all defensible analyst choices. Report the distribution")
-    print("  of joint probabilities across the multiverse.")
+    print("  Exploratory joints only. These are not Sweatman's rank-sum × 2/7 headline.")
+    print("  Validity filter: observed Sagittarius × summer solstice must be a hit.")
+    print("  Precision-filtered catalog = half-width ≤ "
+          f"{PRECISION_FILTER_HALF_WIDTH_YR} yr (dating precision, not magnitude).")
+    print("  Match windows use the path tolerance, not each cluster's half-width.")
     print()
 
-    major_events = [e for e in events if e["half_width_yr"] <= 250]
+    precise_events = precision_filtered_events(events)
     cardinals_opts = {
         "SS only": ["summer_solstice"],
         "All 4": ["spring_equinox", "summer_solstice", "autumn_equinox", "winter_solstice"],
     }
-    catalog_opts = {"All events": events, "Major only": major_events}
+    catalog_opts = {
+        "All events": events,
+        "Precision-filtered (hw≤250)": precise_events,
+    }
     tolerance_opts = [100, 200, 250, 300]
 
     # Animal subsets: all 6, top 5, top 4, top 3
@@ -755,7 +979,6 @@ def run_multiverse(events):
     anchor_opts = ["center", "window"]
 
     N = N_VISIBLE_CONSTELLATIONS
-    all_cardinals = ["spring_equinox", "summer_solstice", "autumn_equinox", "winter_solstice"]
 
     multiverse = []
 
@@ -782,6 +1005,8 @@ def run_multiverse(events):
 
                 for anch_name in anchor_opts:
                     p_anchor = (center_hits if anch_name == "center" else window_hits) / total
+                    observed_hit, observed_detail = observed_anchor_is_hit(
+                        ev_list, tol, anch_name)
 
                     for anim_name, anim_set in animal_opts.items():
                         n_a = len(anim_set)
@@ -798,6 +1023,9 @@ def run_multiverse(events):
                             "p_anchor": p_anchor,
                             "p_similarity": p_sim,
                             "p_joint": p_joint,
+                            "observed_hit": bool(observed_hit),
+                            "observed_match_event": observed_detail.get("event"),
+                            "valid": bool(observed_hit),
                         })
 
     # Convert to arrays for summary stats
@@ -831,60 +1059,132 @@ def run_multiverse(events):
     if len(extended_joints) > 0:
         print(f"    Joint P range: {extended_joints.min():.2e} to {extended_joints.max():.2e}")
 
-    # Sweatman's specific path
+    # Exploratory reference path: the v1 "Sweatman path" settings.
+    # This joint is rank-sum × anchor rate. It is not the published 1.4M figure.
     sw = next(m for m in multiverse
               if m["cardinal"] == "SS only" and m["catalog"] == "All events"
               and m["tolerance"] == 250 and m["anchor"] == "center"
               and m["animals"] == "All 6 (sum=18)")
-    print(f"\n  Sweatman's path:")
+    print(f"\n  Exploratory reference path (not the published 1.4M):")
     print(f"    SS only, all events, ±250 yr, center anchor, all 6 animals")
-    print(f"    P(joint) = {sw['p_joint']:.2e}  (≈ 1 in {1/sw['p_joint']:,.0f})")
+    print(f"    observed_hit = {sw['observed_hit']} ({sw['observed_match_event']})")
+    if sw["p_joint"] > 0:
+        print(f"    P(joint) = {sw['p_joint']:.2e}  (≈ 1 in {1/sw['p_joint']:,.0f})")
 
-    more_sig = np.sum(joints_nonzero <= sw["p_joint"])
-    print(f"    {more_sig}/{len(joints_nonzero)} paths are as or more significant")
-    print(f"    ({more_sig/len(joints_nonzero):.1%} of the full multiverse)")
+    def _as_sig(paths):
+        return [m for m in paths if m["p_joint"] <= sw["p_joint"]]
 
-    # Within primary only
-    if len(primary_joints) > 0:
-        more_sig_primary = np.sum(primary_joints <= sw["p_joint"])
-        print(f"    {more_sig_primary}/{len(primary_joints)} primary paths are as or more significant")
-        print(f"    ({more_sig_primary/len(primary_joints):.1%} of primary multiverse)")
+    primary_zero = [m for m in primary if m["p_joint"] == 0]
+    primary_miss = [m for m in primary if not m["observed_hit"]]
+    primary_valid = [m for m in primary if m["observed_hit"]]
+    # v1 denominator dropped zero-P paths and did not require a hit.
+    unfiltered_nonzero = [m for m in primary if m["p_joint"] > 0]
+    unfiltered_as_sig = _as_sig(unfiltered_nonzero)
+    valid_as_sig = _as_sig(primary_valid)
+    all_valid = [m for m in multiverse if m["observed_hit"]]
+    all_miss = [m for m in multiverse if not m["observed_hit"]]
+    all_zero = [m for m in multiverse if m["p_joint"] == 0]
 
-    best = min(multiverse, key=lambda m: m["p_joint"] if m["p_joint"] > 0 else float("inf"))
-    worst = max(multiverse, key=lambda m: m["p_joint"])
-    print(f"\n  Most significant path:")
+    print(f"\n  PRIMARY exclusions (of {len(primary)} paths, all 6 animals):")
+    print(f"    zero-P paths:                 {len(primary_zero)}")
+    print(f"    observed reading is a miss:   {len(primary_miss)}")
+    print(f"    valid (observed reading hits): {len(primary_valid)}")
+    if unfiltered_nonzero:
+        print(f"    v1-style tally (drop zero-P, no hit filter): "
+              f"{len(unfiltered_as_sig)}/{len(unfiltered_nonzero)} "
+              f"= {len(unfiltered_as_sig)/len(unfiltered_nonzero):.1%}")
+    if primary_valid:
+        print(f"    validity-filtered tally:      "
+              f"{len(valid_as_sig)}/{len(primary_valid)} "
+              f"= {len(valid_as_sig)/len(primary_valid):.1%}")
+        print("    Miss paths are excluded from this tally. Zero-P paths are counted")
+        print("    in the exclusion line above and are not dropped silently.")
+
+    valid_summary = _path_joint_summary(primary_valid)
+    if valid_summary["n"] and valid_summary["min"] is not None:
+        print(f"    Valid primary joint range: {valid_summary['min']:.2e} to {valid_summary['max']:.2e}")
+        print(f"    Valid primary median:      {valid_summary['median']:.2e}")
+
+    print(f"\n  FULL multiverse exclusions (of {len(multiverse)} paths):")
+    print(f"    zero-P: {len(all_zero)}; observed miss: {len(all_miss)}; valid: {len(all_valid)}")
+
+    best_pool = primary_valid or primary
+    best = min(best_pool, key=lambda m: m["p_joint"] if m["p_joint"] > 0 else float("inf"))
+    worst = max(best_pool, key=lambda m: m["p_joint"])
+    print(f"\n  Most significant VALID primary path:")
     print(f"    {best['cardinal']}, {best['catalog']}, ±{best['tolerance']} yr, "
           f"{best['anchor']}, {best['animals']}")
-    print(f"    P = {best['p_joint']:.2e}  (≈ 1 in {1/best['p_joint']:,.0f})" if best["p_joint"] > 0 else "")
-    print(f"  Least significant path:")
+    if best["p_joint"] > 0:
+        print(f"    P = {best['p_joint']:.2e}  (≈ 1 in {1/best['p_joint']:,.0f})")
+    print(f"  Least significant VALID primary path:")
     print(f"    {worst['cardinal']}, {worst['catalog']}, ±{worst['tolerance']} yr, "
           f"{worst['anchor']}, {worst['animals']}")
-    print(f"    P = {worst['p_joint']:.2e}  (≈ 1 in {1/worst['p_joint']:,.0f})" if worst["p_joint"] > 0 else "")
+    if worst["p_joint"] > 0:
+        print(f"    P = {worst['p_joint']:.2e}  (≈ 1 in {1/worst['p_joint']:,.0f})")
 
-    print(f"""
+    miss_keys = sorted({
+        (m["cardinal"], m["catalog"], m["tolerance"], m["anchor"])
+        for m in primary_miss
+    })
+    print(f"\n  Primary date-rules where the observed reading misses ({len(miss_keys)}):")
+    for cardinal, catalog, tol, anchor in miss_keys:
+        print(f"    {cardinal}, {catalog}, ±{tol} yr, {anchor}")
+
+    print("""
   Interpretation:
-    The quoted significance depends heavily on analyst choices. Not all paths
-    are equally defensible: dropping animals post hoc (extended multiverse) is
-    a stronger degree of freedom than choosing center vs. window anchor
-    (primary multiverse). Even within the primary multiverse ({len(primary)} paths),
-    the range spans {primary_joints.min():.1e} to {primary_joints.max():.1e}. The reported
-    p-value should be understood as conditional on one analytical path.""")
+    Joint products are path-dependent. Dropping animals post hoc (extended
+    multiverse) is a stronger degree of freedom than center vs. window.
+    Paths on which Sagittarius × summer solstice is a miss are not alternative
+    evaluations of the observed reading. P(top) × P(bottom) is not used here.""")
+
+    def _frac(num, den):
+        return float(num / den) if den else None
 
     return {
         "n_paths": len(multiverse),
         "n_primary": len(primary),
         "n_extended": len(extended),
-        "n_nonzero": len(joints_nonzero),
-        "primary_min": float(primary_joints.min()) if len(primary_joints) > 0 else None,
-        "primary_median": float(np.median(primary_joints)) if len(primary_joints) > 0 else None,
-        "primary_max": float(primary_joints.max()) if len(primary_joints) > 0 else None,
+        "n_nonzero": int(len(joints_nonzero)),
+        "n_zero": len(all_zero),
+        "n_observed_miss": len(all_miss),
+        "n_valid": len(all_valid),
+        "n_primary_zero": len(primary_zero),
+        "n_primary_observed_miss": len(primary_miss),
+        "n_primary_valid": len(primary_valid),
+        "primary_unfiltered_nonzero": _path_joint_summary(unfiltered_nonzero),
+        "primary_valid": valid_summary,
+        "primary_min": valid_summary["min"],
+        "primary_median": valid_summary["median"],
+        "primary_max": valid_summary["max"],
         "min_joint": float(joints_nonzero.min()) if len(joints_nonzero) > 0 else None,
         "median_joint": float(np.median(joints_nonzero)) if len(joints_nonzero) > 0 else None,
         "max_joint": float(joints_nonzero.max()) if len(joints_nonzero) > 0 else None,
+        "reference_path": {
+            "cardinal": sw["cardinal"],
+            "catalog": sw["catalog"],
+            "tolerance": sw["tolerance"],
+            "anchor": sw["anchor"],
+            "animals": sw["animals"],
+            "p_joint": sw["p_joint"],
+            "observed_hit": sw["observed_hit"],
+            "observed_match_event": sw["observed_match_event"],
+            "note": "Exploratory rank-sum × anchor rate. Not Sweatman's published 1.4M (rank-sum × 2/7).",
+        },
         "sweatman_path_joint": sw["p_joint"],
-        "frac_as_significant": float(more_sig / len(joints_nonzero)) if len(joints_nonzero) > 0 else None,
-        "frac_primary_as_significant": float(more_sig_primary / len(primary_joints)) if len(primary_joints) > 0 else None,
-        "all_paths": multiverse,  # full table for reproducibility
+        "frac_as_significant_unfiltered_nonzero": _frac(len(unfiltered_as_sig), len(unfiltered_nonzero)),
+        "frac_primary_as_significant_unfiltered_nonzero": _frac(
+            len(unfiltered_as_sig), len(unfiltered_nonzero)),
+        "frac_primary_as_significant": _frac(len(valid_as_sig), len(primary_valid)),
+        "n_primary_valid_as_significant": len(valid_as_sig),
+        "validity_filter": (
+            "observed Sagittarius × summer solstice is a hit under the path's "
+            "catalog, tolerance, and anchor model"
+        ),
+        "primary_miss_rules": [
+            {"cardinal": c, "catalog": cat, "tolerance": tol, "anchor": anch}
+            for c, cat, tol, anch in miss_keys
+        ],
+        "all_paths": multiverse,
     }
 
 
@@ -1333,8 +1633,9 @@ def generate_figures(anchor_results, similarity_results, sensitivity_results, ev
         fig, ax = plt.subplots(figsize=(9, 5))
         ax.hist(p_vals * 100, bins=30, color="darkorange", alpha=0.7,
                 edgecolor="white", linewidth=0.5)
-        ax.axvline(30.8, color="blue", linewidth=2, linestyle="--",
-                   label="Baseline (unperturbed): 30.8%")
+        baseline_pct = anchor_results[250]["p_center"] * 100
+        ax.axvline(baseline_pct, color="blue", linewidth=2, linestyle="--",
+                   label=f"Baseline (unperturbed): {baseline_pct:.1f}%")
         ax.axvline(p_vals.mean() * 100, color="red", linewidth=2,
                    label=f"Mean: {p_vals.mean():.1%}")
         ax.set_xlabel("P(anchor hit) across perturbed catalogs (%)", fontsize=11)
@@ -1356,8 +1657,8 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     print("╔══════════════════════════════════════════════════════════════════════╗")
-    print("║  GÖBEKLI TEPE PILLAR 43 — STATISTICAL ARCHAEOASTRONOMY TEST  v3   ║")
-    print("║  Testing Sweatman & Tsikritsis (2017) constellation claims         ║")
+    print("║  GÖBEKLI TEPE PILLAR 43 — STATISTICAL TEST  v2 corrections        ║")
+    print("║  Rank-sum × 2/7 is the published headline; date tests are separate ║")
     print("╚══════════════════════════════════════════════════════════════════════╝")
     print()
     print(f"  Precession period:       {PRECESSION_PERIOD_YR:,} yr")
@@ -1399,37 +1700,42 @@ def main():
     sr = shift_results
     al = animal_loo_results
     most_critical = max(al["results"], key=lambda r: r["ratio"])
+    tied_critical = [r["animal"] for r in al["results"]
+                     if abs(r["ratio"] - most_critical["ratio"]) < 1e-9]
     conservative = next(r for r in ranking_results if "Conservative" in r["scheme"])
     ip = identity_results
 
     print("\n" + "=" * 72)
     print("SUMMARY")
     print("=" * 72)
+    prec_ss = sensitivity_results["Precision-filtered, SS only"][250]["p"]
+    ref = mv["reference_path"]
     print(f"""
-  Sweatman claims statistical significance at ~1 in 1.4 million.
-  We decompose and re-evaluate this claim across 13 experiments:
+  Published headline (Sweatman & Gerogiorgis 2025): rank-sum × 2/7
+    = {similarity_results['p_rank_sum_times_2_over_7']:.4e}
+    (≈ 1 in {similarity_results['one_in_rank_sum_times_2_over_7']:,}). No date term.
+  Exploratory date × visual joints are a separate test.
 
-  1. DATE COINCIDENCE: Strict {r250['p_center']:.1%}, Broad {r250['p_window']:.1%}
+  1. DATE COINCIDENCE: Strict {r250['p_center']:.1%} ({r250['center_hits']}/{r250['total']}), Broad {r250['p_window']:.1%} ({r250['window_hits']}/{r250['total']})
   2. VISUAL SIMILARITY: P = {p_sim:.4e} (≈ 1 in {1/p_sim:,.0f})
-  3. JOINT: Strict {r250['p_center'] * p_sim:.2e}, Broad {r250['p_window'] * p_sim:.2e}
-  4. SENSITIVITY: Most conservative scenario still gives 23% at ±250 yr.
-  5. CATALOG ROBUSTNESS: {sweep_results['min']:.1%}–{sweep_results['max']:.1%} across 500 catalogs.
-  6. DECOMPOSITION: Top 3 = 1 in {1/dr['top3_p']:,.0f}. Bottom 3 = 1 in {1/dr['bot3_p']:,.0f}.
+  3. EXPLORATORY JOINT: Strict {r250['p_center'] * p_sim:.2e}, Broad {r250['p_window'] * p_sim:.2e}
+  4. SENSITIVITY: Precision-filtered, summer solstice only, ±250 yr = {prec_ss:.0%}.
+  5. CATALOG ROBUSTNESS: {sweep_results['min']:.1%}–{sweep_results['max']:.1%} (mean {sweep_results['mean']:.1%}) across 500 catalogs.
+  6. DECOMPOSITION: Pre-specified top 3 = 1 in {1/dr['top3_p']:,.0f}. Selection-adjusted = 1 in {dr['top3_selection_adjusted_one_in']:,}. Bottom 3 = 1 in {1/dr['bot3_p']:,.0f}.
   7. LEAVE-ONE-EVENT-OUT: Min anchor P = {min(r['p'] for r in loo_results['results']):.1%}.
-  8. MULTIVERSE: Primary {mv['primary_min']:.1e}–{mv['primary_max']:.1e}; {mv['frac_primary_as_significant']:.0%} of primary paths ≤ Sweatman's.
-  9. COVERAGE: {coverage_results[250]:.1%} of 20,000–5,000 BC is near an event.
-  10. CIRCULAR-SHIFT: {sr['frac_ge_baseline']:.0%} of shifts ≥ baseline.
-  11. ANIMAL-LOO: Most critical = {most_critical['animal']} ({most_critical['ratio']:.1f}× impact).
+  8. MULTIVERSE (validity-filtered primary): {mv['primary_min']:.1e}–{mv['primary_max']:.1e}; {mv['n_primary_valid_as_significant']}/{mv['n_primary_valid']} valid paths ≤ reference ({mv['frac_primary_as_significant']:.1%}). Reference observed_hit={ref['observed_hit']}.
+  9. COVERAGE: {coverage_results[250]:.1%} of 20,000–5,000 BC is within ±250 yr of a catalogued event.
+  10. CIRCULAR-SHIFT: {sr['frac_ge_baseline']:.1%} of shifts ≥ baseline.
+  11. ANIMAL-LOO: Most critical (tied) = {', '.join(tied_critical)} ({most_critical['ratio']:.1f}× impact).
   12. RANKING SENSITIVITY: Conservative (+1) drops to 1 in {1/conservative['p_all']:,.0f}.
   13. IDENTITY PERMUTATION: P(specific trio gets all rank-1 slots) = {ip['p_identity']:.0%}.
 
   KEY FINDINGS:
-  - The date coincidence is weak: {coverage_results[250]:.0%} of the era is near something notable.
-  - The visual similarity is carried by 3 of 6 mappings (1 in 85,184 vs 1 in 187).
-  - Those 3 mappings are self-scored and have never been blindly validated.
-  - The top-3 dominance pattern is stable across conservative ranking adjustments.
-  - The identity of the top-3 trio has a {ip['p_identity']:.0%} chance under random assignment.
-  - Significance varies by 2 orders of magnitude across defensible analyst choices.
+  - The published ~1-in-1.4-million figure is rank-sum × 2/7, not a date×visual joint.
+  - The date coincidence is not rare under this catalog: coverage {coverage_results[250]:.1%}; strict anchor {r250['p_center']:.1%}; broad anchor {r250['p_window']:.1%}.
+  - Pre-specified top-3 rarity is 1 in {1/dr['top3_p']:,.0f}; sort-then-pick is 1 in {dr['top3_selection_adjusted_one_in']:,}.
+  - Those rankings are self-scored. The canid → Lupus identification is tentative.
+  - Validity-filtered multiverse paths are a distribution, not a single p-value.
   - A blind ranking experiment would be the decisive test.
 """)
 
@@ -1451,7 +1757,7 @@ def main():
             "per_event": [{k: v for k, v in r.items()} for r in loo_results["results"]],
         },
         "multiverse": multiverse_results,
-        "coverage": coverage_results,
+        "coverage": {str(k): v for k, v in coverage_results.items()},
         "circular_shift": shift_results,
         "leave_one_animal_out": {
             "baseline_p": animal_loo_results["baseline_p"],
@@ -1463,8 +1769,22 @@ def main():
             "precession_period_yr": PRECESSION_PERIOD_YR,
             "n_ecliptic_constellations": len(ECLIPTIC_CONSTELLATIONS),
             "n_visible_constellations": N_VISIBLE_CONSTELLATIONS,
+            "visible_pool_definition": (
+                "Ptolemy 48 minus Canis Major, Lepus, Eridanus, and Argo Navis "
+                "(Sweatman & Gerogiorgis 2025); not every modern constellation visible at 37N"
+            ),
             "n_event_clusters": len(EVENT_CLUSTERS),
             "sweatman_rank_sum": SWEATMAN_RANK_SUM,
+            "pisces_aries_boundary_deg": PISCES_ARIES_BOUNDARY_DEG,
+            "precision_filter_half_width_yr": PRECISION_FILTER_HALF_WIDTH_YR,
+            "precision_filter_meaning": "dating precision (half-width), not event magnitude",
+            "half_width_used_as_match_tolerance": False,
+            "stellarium_residual_table": "not_run",
+            "event_catalog": [
+                {"name": e["name"], "date_bc": e["date_bc"],
+                 "half_width_yr": e["half_width_yr"], "age_basis": e.get("age_basis")}
+                for e in EVENT_CLUSTERS
+            ],
         },
     }
     with open(OUTPUT_DIR / "results.json", "w") as f:
@@ -1474,4 +1794,22 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    _log_fh = open(OUTPUT_DIR / "run_log.txt", "w", encoding="utf-8")
+    _stdout = sys.stdout
+
+    class _Tee:
+        def write(self, data):
+            _stdout.write(data)
+            _log_fh.write(data)
+        def flush(self):
+            _stdout.flush()
+            _log_fh.flush()
+
+    sys.stdout = _Tee()
+    try:
+        main()
+    finally:
+        sys.stdout = _stdout
+        _log_fh.close()
