@@ -6,7 +6,7 @@ Simone Pomposi, Independent Researcher
 
 | Version | Date | Where | PDF in this repository |
 |---------|------|-------|------------------------|
-| 3 (current) | 2026-11-10 | not yet on Zenodo | [`gobekli-pillar43-statistics_paper_v3.pdf`](gobekli-pillar43-statistics_paper_v3.pdf) |
+| 3 (current) | 2026-11-10 | [10.5281/zenodo.24104806](https://doi.org/10.5281/zenodo.24104806) | [`gobekli-pillar43-statistics_paper_v3.pdf`](gobekli-pillar43-statistics_paper_v3.pdf) |
 | 2 | 2026-10-23 | [10.5281/zenodo.23593750](https://doi.org/10.5281/zenodo.23593750) | [`gobekli-pillar43-statistics_paper_v2.pdf`](gobekli-pillar43-statistics_paper_v2.pdf) |
 | 1 | 2026-05-24 | [10.5281/zenodo.20364947](https://doi.org/10.5281/zenodo.20364947) | [`gobekli-pillar43-statistics_paper.pdf`](gobekli-pillar43-statistics_paper.pdf) |
 
@@ -53,7 +53,7 @@ Still open: a Stellarium residual table, and a sourced calendar age for the mamm
 ```
 paper/gobekli-pillar43-statistics.md        Manuscript source (version 3)
 gobekli_statistical_test.py                 Analysis script (13 experiments, 2 robustness checks)
-gobekli-pillar43-statistics_paper_v3.pdf    PDF built from the manuscript
+gobekli-pillar43-statistics_paper_v3.pdf    Zenodo v3 PDF, built from the manuscript
 gobekli-pillar43-statistics_paper_v2.pdf    Zenodo v2 PDF (unchanged deposit)
 gobekli-pillar43-statistics_paper.pdf       Zenodo v1 PDF (unchanged deposit)
 scripts/build_pdf.sh                        Rebuild the PDF (pandoc + XeLaTeX)
