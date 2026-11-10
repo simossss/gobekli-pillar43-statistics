@@ -22,7 +22,18 @@ Thirteen analyses:
   13. Animal-identity permutation — does it matter WHICH animals carry the signal?
 
 Author: Simone Pomposi, Independent Researcher
-Date: 2026-04; accuracy corrections 2026-10-23 (Zenodo v2 draft, not uploaded)
+Date: 2026-04; accuracy corrections 2026-10-23 (Zenodo v2); v3 corrections 2026-11-10
+
+v3 corrections in this file:
+  - the observed reading is Sweatman's published date (10,950 BC), not the
+    Sagittarius midpoint (11,835 BC). v2 tested the midpoint, which is 885 years
+    from the date he claims, and so reported an Older Dryas hit. His date is
+    50 years from the Younger Dryas cluster and is a hit on every path.
+  - anchor test also reports the hit rate among anchors that land inside the
+    analysis window, and a position null (random date inside the window)
+  - robustness check A: only events that predate the monument
+  - robustness check B: mammoth cluster dropped, or moved to a calibrated age
+  - Figure 1 event labels no longer collide
 
 v2 corrections in this file:
   - constellation_date_range() returns one short interval (no branch-cut wrap)
@@ -107,10 +118,26 @@ SWEATMAN_MAPPINGS = [
 
 SWEATMAN_RANK_SUM = sum(m["rank_of_44"] for m in SWEATMAN_MAPPINGS)  # = 18
 N_TESTED_ANIMALS = len(SWEATMAN_MAPPINGS)  # = 6
+# Ranks 4, 5 and 6 are published as upper bounds ("no worse than"), so 18 is an
+# upper bound on the sum. With the Greek (Almagest) stick figures the published
+# sum is 26.
+SWEATMAN_GREEK_SET_RANK_SUM = 26
 
 SWEATMAN_ANCHOR = "Sagittarius"
 SWEATMAN_CARDINAL = "summer_solstice"
 SWEATMAN_DATE_BC = 10_950
+
+# Robustness check A. Enclosure D's calibrated radiocarbon ranges fall in the
+# mid-to-late 10th millennium cal BC (Dietrich et al. 2013). A memorial cannot
+# record an event that happened after it was carved, so events later than this
+# round cut-off are removed in that check.
+PRE_MONUMENT_CUTOFF_BC = 9_500
+
+# Robustness check B. Kuzmin & Orlova (2004) give "ca. 9700 14C BP" for the
+# mainland mammoth extinction with no error term. On IntCal20 that is about
+# 9,100-9,200 BCE for an assumed 1-sigma of 60-100 14C years (median 9,162 BCE
+# at +/-60, 9,104 BCE at +/-100). 9,150 BCE is used as the calibrated stand-in.
+MAMMOTH_CALIBRATED_BC = 9_150
 
 # ──────────────────────────────────────────────────────────────────────
 #  PALEOCLIMATIC EVENT CATALOG
@@ -249,32 +276,103 @@ def clusters_closer_than(events, years=500):
 
 def observed_anchor_is_hit(events, tolerance, anchor_model):
     """
-    Whether Sweatman's observed reading (Sagittarius × summer solstice) is a hit
-    under this path's catalog, tolerance, and anchor model.
+    Whether Sweatman's observed reading is a hit under this path's catalog and
+    tolerance.
 
-    Center model: the Sagittarius midpoint date falls within `tolerance` of a
-    catalogued event. Window model: the Sagittarius date interval overlaps an
-    event tolerance window. Animal subset is irrelevant to this date check.
+    The observed reading is the date Sweatman & Tsikritsis publish, 10,950 BC.
+    It is not the midpoint of Sagittarius. Their date comes from where the disc
+    sits against the constellation, and it lies near the Ophiuchus edge of the
+    Sagittarius window. v2 of this script tested the midpoint (11,835 BC)
+    instead. That date is 885 years from the published one, and it turned a
+    Younger Dryas hit into an Older Dryas hit and eight primary paths into
+    misses. The midpoint is still what the null draws for a random anchor; it
+    is reported here only as a diagnostic.
+
+    The same date is tested under both anchor models. The anchor model changes
+    the null rate, not what was observed.
     """
     sag = next(c for c in ECLIPTIC_CONSTELLATIONS if c["name"] == SWEATMAN_ANCHOR)
-    if anchor_model == "center":
-        d_center = constellation_center_date(sag, SWEATMAN_CARDINAL)
-        matched, name, dist = date_matches_any_event(
-            d_center, events, tolerance_override=tolerance)
-        return matched, {
-            "model": "center",
-            "date_bc": d_center,
-            "event": name,
-            "distance_yr": dist,
-        }
-    d_min, d_max = constellation_date_range(sag, SWEATMAN_CARDINAL)
-    matched, name = window_overlaps_any_event(
-        d_min, d_max, events, tolerance_override=tolerance)
+    matched, name, dist = date_matches_any_event(
+        SWEATMAN_DATE_BC, events, tolerance_override=tolerance)
+    d_mid = constellation_center_date(sag, SWEATMAN_CARDINAL)
+    mid_matched, mid_name, mid_dist = date_matches_any_event(
+        d_mid, events, tolerance_override=tolerance)
     return matched, {
-        "model": "window",
-        "date_min_bc": d_min,
-        "date_max_bc": d_max,
+        "model": anchor_model,
+        "date_bc": SWEATMAN_DATE_BC,
         "event": name,
+        "distance_yr": dist,
+        "sagittarius_midpoint_bc": d_mid,
+        "midpoint_is_hit": bool(mid_matched),
+        "midpoint_nearest_event": mid_name,
+        "midpoint_distance_yr": mid_dist,
+    }
+
+
+def window_fraction_near_event(date_min_bc, date_max_bc, events, tolerance):
+    """Share of a date window lying within ±tolerance of any event (exact interval union)."""
+    spans = []
+    for ev in events:
+        lo = max(date_min_bc, ev["date_bc"] - tolerance)
+        hi = min(date_max_bc, ev["date_bc"] + tolerance)
+        if hi > lo:
+            spans.append((lo, hi))
+    spans.sort()
+    covered = 0.0
+    cur_lo = cur_hi = None
+    for lo, hi in spans:
+        if cur_hi is None or lo > cur_hi:
+            if cur_hi is not None:
+                covered += cur_hi - cur_lo
+            cur_lo, cur_hi = lo, hi
+        else:
+            cur_hi = max(cur_hi, hi)
+    if cur_hi is not None:
+        covered += cur_hi - cur_lo
+    return covered / (date_max_bc - date_min_bc)
+
+
+def coverage_fraction(events, tolerance, window_start_bc, window_end_bc):
+    """Share of whole years in [window_end_bc, window_start_bc) within ±tolerance of an event.
+    Same indexing as Experiment 9."""
+    window_length = window_start_bc - window_end_bc
+    covered = np.zeros(window_length, dtype=bool)
+    for ev in events:
+        idx_lo = max(0, int(ev["date_bc"] - tolerance - window_end_bc))
+        idx_hi = min(window_length, int(ev["date_bc"] + tolerance - window_end_bc))
+        if idx_hi > idx_lo:
+            covered[idx_lo:idx_hi] = True
+    return float(covered.sum() / window_length)
+
+
+def anchor_counts(events, tolerance, window_start_bc=None, window_end_bc=None):
+    """Center hits, window hits, and center hits among anchors whose center date
+    lies in [window_end_bc, window_start_bc], over the 52 anchors."""
+    if window_start_bc is None:
+        window_start_bc = ANALYSIS_WINDOW_START_BC
+    if window_end_bc is None:
+        window_end_bc = ANALYSIS_WINDOW_END_BC
+    cardinals = ["spring_equinox", "summer_solstice", "autumn_equinox", "winter_solstice"]
+    center = window = in_win = center_in_win = 0
+    position_sum = 0.0
+    for const in ECLIPTIC_CONSTELLATIONS:
+        for card in cardinals:
+            d = constellation_center_date(const, card)
+            d_min, d_max = constellation_date_range(const, card)
+            hit = date_matches_any_event(d, events, tolerance_override=tolerance)[0]
+            center += bool(hit)
+            window += bool(window_overlaps_any_event(
+                d_min, d_max, events, tolerance_override=tolerance)[0])
+            position_sum += window_fraction_near_event(d_min, d_max, events, tolerance)
+            if window_end_bc <= d <= window_start_bc:
+                in_win += 1
+                center_in_win += bool(hit)
+    return {
+        "center_hits": center, "window_hits": window, "total": 52,
+        "n_centers_in_window": in_win, "center_hits_in_window": center_in_win,
+        "p_center": center / 52, "p_window": window / 52,
+        "p_center_in_window": (center_in_win / in_win) if in_win else None,
+        "p_position": position_sum / 52,
     }
 
 
@@ -415,13 +513,22 @@ def run_anchor_test(events, tolerance_values=(100, 250, 500)):
 
         p_center = center_hits / total
         p_window = window_hits / total
+        extra = anchor_counts(events, tol)
         results[tol] = {
             "center_hits": center_hits, "window_hits": window_hits, "total": total,
             "p_center": p_center, "p_window": p_window, "center_details": center_details,
+            "n_centers_in_window": extra["n_centers_in_window"],
+            "center_hits_in_window": extra["center_hits_in_window"],
+            "p_center_in_window": extra["p_center_in_window"],
+            "p_position": extra["p_position"],
         }
 
         print(f"  ±{tol} yr:  center-only = {center_hits}/{total} ({p_center:.1%})"
               f"    window-overlap = {window_hits}/{total} ({p_window:.1%})")
+        print(f"            centers inside {ANALYSIS_WINDOW_START_BC:,}–{ANALYSIS_WINDOW_END_BC:,} BC: "
+              f"{extra['center_hits_in_window']}/{extra['n_centers_in_window']} "
+              f"({extra['p_center_in_window']:.1%})"
+              f"    position null (random date in window) = {extra['p_position']:.1%}")
 
     # Print bracket summary for ±250
     r250 = results[250]
@@ -485,6 +592,22 @@ def run_anchor_test(events, tolerance_values=(100, 250, 500)):
     print(f"    SS at 10,950 BC → λ = {lam:.1f}° (J2000)")
     print(f"    Sagittarius ecliptic range: {sag['lam_start']}°–{sag['lam_end']}°")
     print(f"    Sagittarius date window: {round(d_min):,}–{round(d_max):,} BC (center: {round(d_center):,} BC)")
+    print(f"    Published date {SWEATMAN_DATE_BC:,} BC is {round(d_center) - SWEATMAN_DATE_BC:,} yr from that center.")
+    for tol in tolerance_values:
+        hit, det = observed_anchor_is_hit(events, tol, "center")
+        print(f"    ±{tol} yr: published date hit = {hit} ({det['event']}, Δ={det['distance_yr']:.0f} yr); "
+              f"midpoint hit = {det['midpoint_is_hit']} "
+              f"({det['midpoint_nearest_event']}, Δ={det['midpoint_distance_yr']:.0f} yr)")
+    results["observed"] = {
+        "published_date_bc": SWEATMAN_DATE_BC,
+        "sagittarius_midpoint_bc": d_center,
+        "midpoint_minus_published_yr": d_center - SWEATMAN_DATE_BC,
+        "by_tolerance": {
+            str(tol): observed_anchor_is_hit(events, tol, "center")[1] | {
+                "hit": bool(observed_anchor_is_hit(events, tol, "center")[0])}
+            for tol in tolerance_values
+        },
+    }
 
     return results
 
@@ -551,7 +674,21 @@ def run_similarity_test():
     print(f"      under a distinct-ranks null. The with-replacement model is the natural")
     print(f"      permissive null under independent per-animal rankings.")
 
+    # Sweatman & Gerogiorgis (2025) report that the Greek (Almagest) stick-figure
+    # set raises the summed score from 18 to 26 and the headline to about
+    # 1 in 110,000. The same formula reproduces that figure.
+    p_greek = exact_rank_sum_probability(N_TESTED_ANIMALS, N_VISIBLE_CONSTELLATIONS,
+                                         SWEATMAN_GREEK_SET_RANK_SUM)
+    p_greek_style = p_greek * SWEATMAN_SYMMETRY_SPATIAL_FACTOR
+    print()
+    print(f"  Greek stick-figure set (published sum {SWEATMAN_GREEK_SET_RANK_SUM}):")
+    print(f"    P(S ≤ {SWEATMAN_GREEK_SET_RANK_SUM}) × 2/7 = {p_greek_style:.3e}"
+          f"  (≈ 1 in {1/p_greek_style:,.0f})")
+
     result = {
+        "greek_set_rank_sum": SWEATMAN_GREEK_SET_RANK_SUM,
+        "p_greek_set_times_2_over_7": p_greek_style,
+        "one_in_greek_set_times_2_over_7": round(1 / p_greek_style),
         "sweatman_rank_sum": SWEATMAN_RANK_SUM,
         "expected_sum": expected_sum,
         "std_sum": round(std_sum, 2),
@@ -941,16 +1078,18 @@ def run_multiverse(events):
       - Anchor model: center-only vs window-overlap
 
     Validity filter: a path counts toward "as significant as the reference path"
-    only when the observed reading (Sagittarius × summer solstice) is a hit
-    under that path's catalog, tolerance, and anchor model. Zero-P paths are
-    retained in the disclosure counts; v1 dropped them from the denominator.
+    only when the observed reading is a hit under that path's catalog and
+    tolerance. The observed reading is Sweatman's published date (10,950 BC).
+    v2 used the Sagittarius midpoint, which excluded eight primary paths. With
+    the published date every path is valid. Zero-P paths are retained in the
+    disclosure counts; v1 dropped them from the denominator.
     """
     print("\n" + "=" * 72)
     print("EXPERIMENT 8: MULTIVERSE / FORKING-PATHS ANALYSIS")
     print("=" * 72)
     print()
     print("  Exploratory joints only. These are not Sweatman's rank-sum × 2/7 headline.")
-    print("  Validity filter: observed Sagittarius × summer solstice must be a hit.")
+    print(f"  Validity filter: Sweatman's published date ({SWEATMAN_DATE_BC:,} BC) must be a hit.")
     print("  Precision-filtered catalog = half-width ≤ "
           f"{PRECISION_FILTER_HALF_WIDTH_YR} yr (dating precision, not magnitude).")
     print("  Match windows use the path tolerance, not each cluster's half-width.")
@@ -1134,8 +1273,9 @@ def run_multiverse(events):
   Interpretation:
     Joint products are path-dependent. Dropping animals post hoc (extended
     multiverse) is a stronger degree of freedom than center vs. window.
-    Paths on which Sagittarius × summer solstice is a miss are not alternative
-    evaluations of the observed reading. P(top) × P(bottom) is not used here.""")
+    A path on which the published date is a miss would not be an alternative
+    evaluation of the observed reading. No path here is such a miss.
+    P(top) × P(bottom) is not used here.""")
 
     def _frac(num, den):
         return float(num / den) if den else None
@@ -1177,9 +1317,12 @@ def run_multiverse(events):
         "frac_primary_as_significant": _frac(len(valid_as_sig), len(primary_valid)),
         "n_primary_valid_as_significant": len(valid_as_sig),
         "validity_filter": (
-            "observed Sagittarius × summer solstice is a hit under the path's "
-            "catalog, tolerance, and anchor model"
+            "Sweatman's published date (10,950 BC) is a hit under the path's "
+            "catalog and tolerance"
         ),
+        "primary_span_factor": (
+            float(valid_summary["max"] / valid_summary["min"])
+            if valid_summary["n"] and valid_summary["min"] else None),
         "primary_miss_rules": [
             {"cardinal": c, "catalog": cat, "tolerance": tol, "anchor": anch}
             for c, cat, tol, anch in miss_keys
@@ -1232,6 +1375,86 @@ def run_coverage_fraction(events, window_start_bc=20000, window_end_bc=5000,
     print(f"  window has a {results[250]:.1%} chance of being 'near something notable.'")
 
     return results
+
+
+# ──────────────────────────────────────────────────────────────────────
+#  ROBUSTNESS CHECK A: ONLY EVENTS THAT PREDATE THE MONUMENT
+# ──────────────────────────────────────────────────────────────────────
+
+def run_pre_monument_check(events, cutoff_bc=PRE_MONUMENT_CUTOFF_BC,
+                           tolerance_values=(100, 250, 500)):
+    """
+    A memorial cannot record an event that happened after it was carved.
+    Keep only clusters dated at or before `cutoff_bc` and shrink the analysis
+    window to 20,000 BC – cutoff. If the date coincidence were only an effect
+    of counting later events, it would disappear here.
+    """
+    print("\n" + "=" * 72)
+    print("ROBUSTNESS CHECK A: ONLY EVENTS THAT PREDATE THE MONUMENT")
+    print("=" * 72)
+    print()
+    kept = [e for e in events if e["date_bc"] >= cutoff_bc]
+    dropped = [e for e in events if e["date_bc"] < cutoff_bc]
+    print(f"  Cut-off: {cutoff_bc:,} BC. Kept {len(kept)} clusters, removed {len(dropped)}.")
+    print(f"  Removed: {', '.join(e['name'] for e in dropped)}")
+    print(f"  Window: {ANALYSIS_WINDOW_START_BC:,}–{cutoff_bc:,} BC "
+          f"({ANALYSIS_WINDOW_START_BC - cutoff_bc:,} years)")
+    print()
+    out = {
+        "cutoff_bc": cutoff_bc,
+        "kept": [e["name"] for e in kept],
+        "removed": [e["name"] for e in dropped],
+        "by_tolerance": {},
+    }
+    for tol in tolerance_values:
+        c = anchor_counts(kept, tol, ANALYSIS_WINDOW_START_BC, cutoff_bc)
+        cov = coverage_fraction(kept, tol, ANALYSIS_WINDOW_START_BC, cutoff_bc)
+        hit = bool(date_matches_any_event(SWEATMAN_DATE_BC, kept, tolerance_override=tol)[0])
+        c["coverage"] = cov
+        c["published_date_hit"] = hit
+        out["by_tolerance"][str(tol)] = c
+        print(f"  ±{tol:>3d} yr:  coverage {cov:.1%}   center {c['center_hits']}/52 ({c['p_center']:.1%})"
+              f"   centers in window {c['center_hits_in_window']}/{c['n_centers_in_window']} "
+              f"({c['p_center_in_window']:.1%})   window {c['window_hits']}/52 ({c['p_window']:.1%})")
+    print()
+    print("  The date coincidence is still not rare when later events are removed.")
+    return out
+
+
+# ──────────────────────────────────────────────────────────────────────
+#  ROBUSTNESS CHECK B: THE MAMMOTH CLUSTER
+# ──────────────────────────────────────────────────────────────────────
+
+def run_mammoth_sensitivity(events, tolerance=250):
+    """
+    The mammoth cluster sits at 7,700 BCE, which is an uncalibrated 14C figure
+    read as a calendar year. Recompute the anchor rates and the coverage with
+    the cluster removed, and with it moved to a calibrated age.
+    """
+    print("\n" + "=" * 72)
+    print("ROBUSTNESS CHECK B: THE MAMMOTH CLUSTER")
+    print("=" * 72)
+    print()
+    is_mammoth = lambda e: e["name"].startswith("Mammoth")
+    moved = [dict(e, date_bc=MAMMOTH_CALIBRATED_BC) if is_mammoth(e) else e for e in events]
+    variants = {
+        "As in the catalog (7,700 BCE placeholder)": events,
+        "Cluster removed": [e for e in events if not is_mammoth(e)],
+        f"Moved to {MAMMOTH_CALIBRATED_BC:,} BCE (IntCal20, approximate)": moved,
+    }
+    out = {"tolerance": tolerance, "calibrated_bc": MAMMOTH_CALIBRATED_BC, "variants": {}}
+    for name, ev in variants.items():
+        c = anchor_counts(ev, tolerance)
+        cov = coverage_fraction(ev, tolerance, ANALYSIS_WINDOW_START_BC, ANALYSIS_WINDOW_END_BC)
+        out["variants"][name] = {
+            "center_hits": c["center_hits"], "window_hits": c["window_hits"],
+            "p_center": c["p_center"], "p_window": c["p_window"], "coverage": cov,
+        }
+        print(f"  {name:<52s} center {c['center_hits']}/52   window {c['window_hits']}/52"
+              f"   coverage {cov:.1%}")
+    print()
+    print("  The cluster does not carry the result either way.")
+    return out
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -1529,24 +1752,36 @@ def generate_figures(anchor_results, similarity_results, sensitivity_results, ev
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     # ── Fig 1: Timeline ──
-    fig, ax = plt.subplots(figsize=(14, 7))
+    fig, ax = plt.subplots(figsize=(11, 6.4))
     colors_c = plt.cm.Set3(np.linspace(0, 1, len(ECLIPTIC_CONSTELLATIONS)))
     for i, const in enumerate(ECLIPTIC_CONSTELLATIONS):
         d_min, d_max = constellation_date_range(const, "summer_solstice")
         ax.barh(i, d_max - d_min, left=d_min, height=0.7,
                 color=colors_c[i], edgecolor="gray", linewidth=0.5)
         ax.text((d_min + d_max) / 2, i, const["name"],
-                ha="center", va="center", fontsize=7, fontweight="bold")
-    for ev in events:
+                ha="center", va="center", fontsize=7.5, fontweight="bold")
+    n_rows = len(ECLIPTIC_CONSTELLATIONS)
+    ordered = sorted(events, key=lambda e: -e["date_bc"])
+    key_lines = []
+    for k, ev in enumerate(ordered, start=1):
         ax.axvline(ev["date_bc"], color="red", alpha=0.4, linewidth=0.8, linestyle="--")
-        ax.text(ev["date_bc"], len(ECLIPTIC_CONSTELLATIONS) + 0.3,
-                ev["name"], rotation=45, fontsize=5, ha="right", va="bottom", color="red")
+        # Numbers alternate between two rows so close events do not overlap.
+        ax.text(ev["date_bc"], n_rows - 0.25 + 0.45 * ((k - 1) % 2), str(k),
+                fontsize=9, ha="center", va="bottom", color="red", fontweight="bold")
+        short = ev["name"].split(" (")[0]
+        key_lines.append(f"{k:>2d}  {short} ({ev['date_bc']:,} BC)")
+    # The upper-left of the panel is empty: no window or event lies there.
+    ax.text(0.012, 0.975, "\n".join(key_lines), transform=ax.transAxes,
+            fontsize=7.5, color="red", ha="left", va="top", family="monospace",
+            bbox=dict(boxstyle="round,pad=0.4", facecolor="white", edgecolor="red",
+                      alpha=0.9, linewidth=0.5))
     ax.axvline(SWEATMAN_DATE_BC, color="blue", linewidth=2, alpha=0.7)
-    ax.text(SWEATMAN_DATE_BC, -1.2, f"Sweatman: {SWEATMAN_DATE_BC:,} BC",
-            ha="center", fontsize=8, color="blue", fontweight="bold")
+    ax.text(SWEATMAN_DATE_BC + 250, 1.5, f"Sweatman: {SWEATMAN_DATE_BC:,} BC",
+            ha="right", va="center", fontsize=9, color="blue", fontweight="bold")
+    ax.set_ylim(-0.7, n_rows + 0.9)
     ax.set_xlabel("Year BC", fontsize=11)
     ax.set_ylabel("Ecliptic Constellation (SS sun)", fontsize=11)
-    ax.set_title("Summer Solstice Sun Position by Constellation\nvs. Notable Paleoclimatic Events",
+    ax.set_title("Summer Solstice Sun Position by Constellation\nvs. Catalogued Paleoclimatic Events",
                  fontsize=13)
     ax.invert_xaxis()
     ax.set_yticks(range(len(ECLIPTIC_CONSTELLATIONS)))
@@ -1657,7 +1892,7 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     print("╔══════════════════════════════════════════════════════════════════════╗")
-    print("║  GÖBEKLI TEPE PILLAR 43 — STATISTICAL TEST  v2 corrections        ║")
+    print("║  GÖBEKLI TEPE PILLAR 43 — STATISTICAL TEST  v3 corrections        ║")
     print("║  Rank-sum × 2/7 is the published headline; date tests are separate ║")
     print("╚══════════════════════════════════════════════════════════════════════╝")
     print()
@@ -1687,6 +1922,8 @@ def main():
     loo_results = run_leave_one_out(EVENT_CLUSTERS)
     multiverse_results = run_multiverse(EVENT_CLUSTERS)
     coverage_results = run_coverage_fraction(EVENT_CLUSTERS)
+    pre_monument_results = run_pre_monument_check(EVENT_CLUSTERS)
+    mammoth_results = run_mammoth_sensitivity(EVENT_CLUSTERS)
     shift_results = run_circular_shift_test(EVENT_CLUSTERS)
     animal_loo_results = run_leave_one_animal_out()
     ranking_results = run_ranking_sensitivity()
@@ -1723,19 +1960,23 @@ def main():
   5. CATALOG ROBUSTNESS: {sweep_results['min']:.1%}–{sweep_results['max']:.1%} (mean {sweep_results['mean']:.1%}) across 500 catalogs.
   6. DECOMPOSITION: Pre-specified top 3 = 1 in {1/dr['top3_p']:,.0f}. Selection-adjusted = 1 in {dr['top3_selection_adjusted_one_in']:,}. Bottom 3 = 1 in {1/dr['bot3_p']:,.0f}.
   7. LEAVE-ONE-EVENT-OUT: Min anchor P = {min(r['p'] for r in loo_results['results']):.1%}.
-  8. MULTIVERSE (validity-filtered primary): {mv['primary_min']:.1e}–{mv['primary_max']:.1e}; {mv['n_primary_valid_as_significant']}/{mv['n_primary_valid']} valid paths ≤ reference ({mv['frac_primary_as_significant']:.1%}). Reference observed_hit={ref['observed_hit']}.
+  8. MULTIVERSE (primary, {mv['n_primary_valid']}/{mv['n_primary']} valid): {mv['primary_min']:.1e}–{mv['primary_max']:.1e} (factor {mv['primary_span_factor']:.1f}); {mv['n_primary_valid_as_significant']}/{mv['n_primary_valid']} paths ≤ reference ({mv['frac_primary_as_significant']:.1%}). Published date matches: {ref['observed_match_event']}.
   9. COVERAGE: {coverage_results[250]:.1%} of 20,000–5,000 BC is within ±250 yr of a catalogued event.
   10. CIRCULAR-SHIFT: {sr['frac_ge_baseline']:.1%} of shifts ≥ baseline.
   11. ANIMAL-LOO: Most critical (tied) = {', '.join(tied_critical)} ({most_critical['ratio']:.1f}× impact).
   12. RANKING SENSITIVITY: Conservative (+1) drops to 1 in {1/conservative['p_all']:,.0f}.
   13. IDENTITY PERMUTATION: P(specific trio gets all rank-1 slots) = {ip['p_identity']:.0%}.
+  A. PRE-MONUMENT EVENTS ONLY (≥ {pre_monument_results['cutoff_bc']:,} BC): coverage {pre_monument_results['by_tolerance']['250']['coverage']:.1%}; strict {pre_monument_results['by_tolerance']['250']['center_hits']}/52; in-window {pre_monument_results['by_tolerance']['250']['center_hits_in_window']}/{pre_monument_results['by_tolerance']['250']['n_centers_in_window']}.
+  B. MAMMOTH CLUSTER: removed → {mammoth_results['variants']['Cluster removed']['center_hits']}/52 strict.
 
   KEY FINDINGS:
   - The published ~1-in-1.4-million figure is rank-sum × 2/7, not a date×visual joint.
   - The date coincidence is not rare under this catalog: coverage {coverage_results[250]:.1%}; strict anchor {r250['p_center']:.1%}; broad anchor {r250['p_window']:.1%}.
   - Pre-specified top-3 rarity is 1 in {1/dr['top3_p']:,.0f}; sort-then-pick is 1 in {dr['top3_selection_adjusted_one_in']:,}.
   - Those rankings are self-scored. The canid → Lupus identification is tentative.
-  - Validity-filtered multiverse paths are a distribution, not a single p-value.
+  - Sweatman's published date (10,950 BC) is 50 years from the Younger Dryas cluster.
+    The Sagittarius midpoint (11,835 BC) is only what the null draws.
+  - Multiverse paths are a distribution, not a single p-value.
   - A blind ranking experiment would be the decisive test.
 """)
 
@@ -1758,6 +1999,8 @@ def main():
         },
         "multiverse": multiverse_results,
         "coverage": {str(k): v for k, v in coverage_results.items()},
+        "pre_monument": pre_monument_results,
+        "mammoth_sensitivity": mammoth_results,
         "circular_shift": shift_results,
         "leave_one_animal_out": {
             "baseline_p": animal_loo_results["baseline_p"],

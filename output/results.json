@@ -5,21 +5,33 @@
       "window_hits": 27,
       "total": 52,
       "p_center": 0.1346153846153846,
-      "p_window": 0.5192307692307693
+      "p_window": 0.5192307692307693,
+      "n_centers_in_window": 30,
+      "center_hits_in_window": 7,
+      "p_center_in_window": 0.23333333333333334,
+      "p_position": 0.1046341649296054
     },
     "250": {
       "center_hits": 14,
       "window_hits": 30,
       "total": 52,
       "p_center": 0.2692307692307692,
-      "p_window": 0.5769230769230769
+      "p_window": 0.5769230769230769,
+      "n_centers_in_window": 30,
+      "center_hits_in_window": 14,
+      "p_center_in_window": 0.4666666666666667,
+      "p_position": 0.23935154398184202
     },
     "500": {
       "center_hits": 22,
       "window_hits": 33,
       "total": 52,
       "p_center": 0.4230769230769231,
-      "p_window": 0.6346153846153846
+      "p_window": 0.6346153846153846,
+      "n_centers_in_window": 30,
+      "center_hits_in_window": 22,
+      "p_center_in_window": 0.7333333333333333,
+      "p_position": 0.397643479264057
     },
     "meta": {
       "n_centers_in_analysis_window": 30,
@@ -47,9 +59,52 @@
       ],
       "half_width_used_for_matching": false,
       "match_uses": "uniform tolerance override; catalog half-width is not the match window"
+    },
+    "observed": {
+      "published_date_bc": 10950,
+      "sagittarius_midpoint_bc": 11834.552777777777,
+      "midpoint_minus_published_yr": 884.552777777777,
+      "by_tolerance": {
+        "100": {
+          "model": "center",
+          "date_bc": 10950,
+          "event": "YD cluster (Laacher+YD+YDIH)",
+          "distance_yr": 50,
+          "sagittarius_midpoint_bc": 11834.552777777777,
+          "midpoint_is_hit": false,
+          "midpoint_nearest_event": "Older Dryas",
+          "midpoint_distance_yr": 240.447222222223,
+          "hit": true
+        },
+        "250": {
+          "model": "center",
+          "date_bc": 10950,
+          "event": "YD cluster (Laacher+YD+YDIH)",
+          "distance_yr": 50,
+          "sagittarius_midpoint_bc": 11834.552777777777,
+          "midpoint_is_hit": true,
+          "midpoint_nearest_event": "Older Dryas",
+          "midpoint_distance_yr": 240.447222222223,
+          "hit": true
+        },
+        "500": {
+          "model": "center",
+          "date_bc": 10950,
+          "event": "YD cluster (Laacher+YD+YDIH)",
+          "distance_yr": 50,
+          "sagittarius_midpoint_bc": 11834.552777777777,
+          "midpoint_is_hit": true,
+          "midpoint_nearest_event": "Older Dryas",
+          "midpoint_distance_yr": 240.447222222223,
+          "hit": true
+        }
+      }
     }
   },
   "similarity_test": {
+    "greek_set_rank_sum": 26,
+    "p_greek_set_times_2_over_7": 9.065208769271846e-06,
+    "one_in_greek_set_times_2_over_7": 110312,
     "sweatman_rank_sum": 18,
     "expected_sum": 135.0,
     "std_sum": 31.1,
@@ -211,11 +266,11 @@
     "n_extended": 96,
     "n_nonzero": 128,
     "n_zero": 0,
-    "n_observed_miss": 32,
-    "n_valid": 96,
+    "n_observed_miss": 0,
+    "n_valid": 128,
     "n_primary_zero": 0,
-    "n_primary_observed_miss": 8,
-    "n_primary_valid": 24,
+    "n_primary_observed_miss": 0,
+    "n_primary_valid": 32,
     "primary_unfiltered_nonzero": {
       "n": 32,
       "n_zero": 0,
@@ -224,14 +279,14 @@
       "max": 1.5743530705406136e-06
     },
     "primary_valid": {
-      "n": 24,
+      "n": 32,
       "n_zero": 0,
-      "min": 4.427868010895476e-07,
-      "median": 7.871765352703068e-07,
+      "min": 1.4759560036318253e-07,
+      "median": 7.133787350887155e-07,
       "max": 1.5743530705406136e-06
     },
-    "primary_min": 4.427868010895476e-07,
-    "primary_median": 7.871765352703068e-07,
+    "primary_min": 1.4759560036318253e-07,
+    "primary_median": 7.133787350887155e-07,
     "primary_max": 1.5743530705406136e-06,
     "min_joint": 1.4759560036318253e-07,
     "median_joint": 1.5014139390101335e-06,
@@ -244,65 +299,17 @@
       "animals": "All 6 (sum=18)",
       "p_joint": 5.903824014527301e-07,
       "observed_hit": true,
-      "observed_match_event": "Older Dryas",
+      "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
       "note": "Exploratory rank-sum \u00d7 anchor rate. Not Sweatman's published 1.4M (rank-sum \u00d7 2/7)."
     },
     "sweatman_path_joint": 5.903824014527301e-07,
     "frac_as_significant_unfiltered_nonzero": 0.40625,
     "frac_primary_as_significant_unfiltered_nonzero": 0.40625,
-    "frac_primary_as_significant": 0.20833333333333334,
-    "n_primary_valid_as_significant": 5,
-    "validity_filter": "observed Sagittarius \u00d7 summer solstice is a hit under the path's catalog, tolerance, and anchor model",
-    "primary_miss_rules": [
-      {
-        "cardinal": "All 4",
-        "catalog": "All events",
-        "tolerance": 100,
-        "anchor": "center"
-      },
-      {
-        "cardinal": "All 4",
-        "catalog": "All events",
-        "tolerance": 200,
-        "anchor": "center"
-      },
-      {
-        "cardinal": "All 4",
-        "catalog": "Precision-filtered (hw\u2264250)",
-        "tolerance": 100,
-        "anchor": "center"
-      },
-      {
-        "cardinal": "All 4",
-        "catalog": "Precision-filtered (hw\u2264250)",
-        "tolerance": 200,
-        "anchor": "center"
-      },
-      {
-        "cardinal": "SS only",
-        "catalog": "All events",
-        "tolerance": 100,
-        "anchor": "center"
-      },
-      {
-        "cardinal": "SS only",
-        "catalog": "All events",
-        "tolerance": 200,
-        "anchor": "center"
-      },
-      {
-        "cardinal": "SS only",
-        "catalog": "Precision-filtered (hw\u2264250)",
-        "tolerance": 100,
-        "anchor": "center"
-      },
-      {
-        "cardinal": "SS only",
-        "catalog": "Precision-filtered (hw\u2264250)",
-        "tolerance": 200,
-        "anchor": "center"
-      }
-    ],
+    "frac_primary_as_significant": 0.40625,
+    "n_primary_valid_as_significant": 13,
+    "validity_filter": "Sweatman's published date (10,950 BC) is a hit under the path's catalog and tolerance",
+    "primary_span_factor": 10.666666666666666,
+    "primary_miss_rules": [],
     "all_paths": [
       {
         "cardinal": "SS only",
@@ -313,9 +320,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.967941338175767e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -326,9 +333,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 3.694183352335118e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -339,9 +346,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 7.183134296207175e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -352,9 +359,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 9.030225972374734e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -366,7 +373,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.5743530705406136e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -379,7 +386,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 2.9553466818680946e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -392,7 +399,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 5.74650743696574e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -405,7 +412,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 7.224180777899787e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -417,9 +424,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.967941338175767e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -430,9 +437,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 3.694183352335118e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -443,9 +450,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 7.183134296207175e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -456,9 +463,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 9.030225972374734e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -470,7 +477,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.5743530705406136e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -483,7 +490,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 2.9553466818680946e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -496,7 +503,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 5.74650743696574e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -509,7 +516,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 7.224180777899787e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -522,7 +529,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 5.903824014527301e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -535,7 +542,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.1082550057005356e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -548,7 +555,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.1549402888621524e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -561,7 +568,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 2.70906779171242e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -574,7 +581,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.5743530705406136e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -587,7 +594,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 2.9553466818680946e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -600,7 +607,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 5.74650743696574e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -613,7 +620,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 7.224180777899787e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -626,7 +633,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 7.871765352703068e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -639,7 +646,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.4776733409340473e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -652,7 +659,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.87325371848287e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -665,7 +672,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.6120903889498936e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -678,7 +685,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.5743530705406136e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -691,7 +698,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 2.9553466818680946e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -704,7 +711,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 5.74650743696574e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -717,7 +724,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 7.224180777899787e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -729,9 +736,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.967941338175767e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -742,9 +749,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 3.694183352335118e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -755,9 +762,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 7.183134296207175e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -768,9 +775,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 9.030225972374734e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -782,7 +789,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 7.871765352703068e-07,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -795,7 +802,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.4776733409340473e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -808,7 +815,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.87325371848287e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -821,7 +828,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.6120903889498936e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -833,9 +840,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.967941338175767e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -846,9 +853,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 3.694183352335118e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -859,9 +866,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 7.183134296207175e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -872,9 +879,9 @@
         "p_anchor": 0.07692307692307693,
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 9.030225972374734e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "SS only",
@@ -886,7 +893,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 7.871765352703068e-07,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -899,7 +906,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.4776733409340473e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -912,7 +919,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.87325371848287e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -925,7 +932,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.6120903889498936e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -938,7 +945,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 5.903824014527301e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -951,7 +958,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.1082550057005356e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -964,7 +971,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.1549402888621524e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -977,7 +984,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 2.70906779171242e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -990,7 +997,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 7.871765352703068e-07,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1003,7 +1010,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.4776733409340473e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1016,7 +1023,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.87325371848287e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1029,7 +1036,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.6120903889498936e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1042,7 +1049,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 5.903824014527301e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1055,7 +1062,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.1082550057005356e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1068,7 +1075,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.1549402888621524e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1081,7 +1088,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 2.70906779171242e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1094,7 +1101,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 7.871765352703068e-07,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1107,7 +1114,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.4776733409340473e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1120,7 +1127,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.87325371848287e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1133,7 +1140,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.6120903889498936e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1145,9 +1152,9 @@
         "p_anchor": 0.1346153846153846,
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 3.4438973418075923e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1158,9 +1165,9 @@
         "p_anchor": 0.1346153846153846,
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 6.464820866586456e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1171,9 +1178,9 @@
         "p_anchor": 0.1346153846153846,
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 1.2570485018362554e-06,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1184,9 +1191,9 @@
         "p_anchor": 0.1346153846153846,
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 1.5802895451655782e-06,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1198,7 +1205,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.328360403268643e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1211,7 +1218,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 2.493573762826205e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1224,7 +1231,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 4.848615649939843e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1237,7 +1244,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 6.095402531352945e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1249,9 +1256,9 @@
         "p_anchor": 0.21153846153846154,
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 5.411838679983359e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1262,9 +1269,9 @@
         "p_anchor": 0.21153846153846154,
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.0159004218921576e-06,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1275,9 +1282,9 @@
         "p_anchor": 0.21153846153846154,
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 1.975361931456973e-06,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1288,9 +1295,9 @@
         "p_anchor": 0.21153846153846154,
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 2.4833121424030515e-06,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1302,7 +1309,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.426757470177431e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1315,7 +1322,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 2.678282930442961e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1328,7 +1335,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 5.2077723647502015e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1341,7 +1348,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 6.5469138299716815e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1354,7 +1361,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 6.887794683615185e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1367,7 +1374,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.2929641733172912e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1380,7 +1387,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.5140970036725107e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1393,7 +1400,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.1605790903311565e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1406,7 +1413,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.475956003631825e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1419,7 +1426,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 2.7706375142513385e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1432,7 +1439,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 5.38735072215538e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1445,7 +1452,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 6.772669479281049e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1458,7 +1465,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 7.871765352703068e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1471,7 +1478,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.4776733409340473e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1484,7 +1491,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.87325371848287e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1497,7 +1504,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.6120903889498936e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1510,7 +1517,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.5251545370862194e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1523,7 +1530,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 2.8629920980597165e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1536,7 +1543,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 5.56692907956056e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1549,7 +1556,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 6.998425128590418e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1561,9 +1568,9 @@
         "p_anchor": 0.057692307692307696,
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 1.4759560036318253e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1574,9 +1581,9 @@
         "p_anchor": 0.057692307692307696,
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 2.770637514251339e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1587,9 +1594,9 @@
         "p_anchor": 0.057692307692307696,
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 5.387350722155381e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1600,9 +1607,9 @@
         "p_anchor": 0.057692307692307696,
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 6.77266947928105e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1614,7 +1621,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 6.395809349071243e-07,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1627,7 +1634,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.2006095895089134e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1640,7 +1647,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.3345186462673316e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1653,7 +1660,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 2.9348234410217883e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1665,9 +1672,9 @@
         "p_anchor": 0.09615384615384616,
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 2.459926672719709e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1678,9 +1685,9 @@
         "p_anchor": 0.09615384615384616,
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 4.617729190418898e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1691,9 +1698,9 @@
         "p_anchor": 0.09615384615384616,
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 8.978917870258968e-07,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1704,9 +1711,9 @@
         "p_anchor": 0.09615384615384616,
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 1.1287782465468417e-06,
-        "observed_hit": false,
-        "observed_match_event": "Older Dryas",
-        "valid": false
+        "observed_hit": true,
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
+        "valid": true
       },
       {
         "cardinal": "All 4",
@@ -1718,7 +1725,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 6.887794683615185e-07,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1731,7 +1738,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.2929641733172912e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1744,7 +1751,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.5140970036725107e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1757,7 +1764,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.1605790903311565e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1770,7 +1777,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 4.427868010895476e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1783,7 +1790,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 8.311912542754016e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1796,7 +1803,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 1.616205216646614e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1809,7 +1816,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 2.0318008437843148e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1822,7 +1829,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 7.379780018159125e-07,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1835,7 +1842,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.3853187571256693e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1848,7 +1855,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.69367536107769e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1861,7 +1868,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.3863347396405246e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1874,7 +1881,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 4.919853345439418e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1887,7 +1894,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 9.235458380837796e-07,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1900,7 +1907,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 1.7957835740517937e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1913,7 +1920,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 2.2575564930936834e-06,
         "observed_hit": true,
-        "observed_match_event": "Older Dryas",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1926,7 +1933,7 @@
         "p_similarity": 2.558323739628497e-06,
         "p_joint": 7.379780018159125e-07,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1939,7 +1946,7 @@
         "p_similarity": 4.802438358035654e-06,
         "p_joint": 1.3853187571256693e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1952,7 +1959,7 @@
         "p_similarity": 9.338074585069326e-06,
         "p_joint": 2.69367536107769e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       },
       {
@@ -1965,7 +1972,7 @@
         "p_similarity": 1.1739293764087153e-05,
         "p_joint": 3.3863347396405246e-06,
         "observed_hit": true,
-        "observed_match_event": "B\u00f8lling-Aller\u00f8d + MWP-1A",
+        "observed_match_event": "YD cluster (Laacher+YD+YDIH)",
         "valid": true
       }
     ]
@@ -1974,6 +1981,95 @@
     "100": 0.18513333333333334,
     "250": 0.41846666666666665,
     "500": 0.6916666666666667
+  },
+  "pre_monument": {
+    "cutoff_bc": 9500,
+    "kept": [
+      "LGM peak",
+      "Bonneville Flood",
+      "Heinrich Event 1",
+      "B\u00f8lling-Aller\u00f8d + MWP-1A",
+      "Older Dryas",
+      "YD cluster (Laacher+YD+YDIH)",
+      "YD termination"
+    ],
+    "removed": [
+      "PBO / Bond 8 / MWP-1B",
+      "Bond 7",
+      "Mammoth extinction (N. Asia, 14C placeholder)",
+      "Bond 6",
+      "8.2ka cluster (Agassiz+Storegga)",
+      "Mazama VEI 7",
+      "Late cluster (BlackSea+Kikai)"
+    ],
+    "by_tolerance": {
+      "100": {
+        "center_hits": 3,
+        "window_hits": 18,
+        "total": 52,
+        "n_centers_in_window": 19,
+        "center_hits_in_window": 3,
+        "p_center": 0.057692307692307696,
+        "p_window": 0.34615384615384615,
+        "p_center_in_window": 0.15789473684210525,
+        "p_position": 0.052781843992575066,
+        "coverage": 0.13333333333333333,
+        "published_date_hit": true
+      },
+      "250": {
+        "center_hits": 7,
+        "window_hits": 21,
+        "total": 52,
+        "n_centers_in_window": 19,
+        "center_hits_in_window": 7,
+        "p_center": 0.1346153846153846,
+        "p_window": 0.40384615384615385,
+        "p_center_in_window": 0.3684210526315789,
+        "p_position": 0.1316639386245468,
+        "coverage": 0.3333333333333333,
+        "published_date_hit": true
+      },
+      "500": {
+        "center_hits": 12,
+        "window_hits": 25,
+        "total": 52,
+        "n_centers_in_window": 19,
+        "center_hits_in_window": 11,
+        "p_center": 0.23076923076923078,
+        "p_window": 0.4807692307692308,
+        "p_center_in_window": 0.5789473684210527,
+        "p_position": 0.2372751583756658,
+        "coverage": 0.5785714285714286,
+        "published_date_hit": true
+      }
+    }
+  },
+  "mammoth_sensitivity": {
+    "tolerance": 250,
+    "calibrated_bc": 9150,
+    "variants": {
+      "As in the catalog (7,700 BCE placeholder)": {
+        "center_hits": 14,
+        "window_hits": 30,
+        "p_center": 0.2692307692307692,
+        "p_window": 0.5769230769230769,
+        "coverage": 0.41846666666666665
+      },
+      "Cluster removed": {
+        "center_hits": 14,
+        "window_hits": 30,
+        "p_center": 0.2692307692307692,
+        "p_window": 0.5769230769230769,
+        "coverage": 0.4018
+      },
+      "Moved to 9,150 BCE (IntCal20, approximate)": {
+        "center_hits": 15,
+        "window_hits": 30,
+        "p_center": 0.28846153846153844,
+        "p_window": 0.5769230769230769,
+        "coverage": 0.41846666666666665
+      }
+    }
   },
   "circular_shift": {
     "baseline_p": 0.2692307692307692,

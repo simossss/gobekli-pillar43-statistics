@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Build gobekli-pillar43-statistics_paper_v2.pdf from the corrected manuscript.
+# Build gobekli-pillar43-statistics_paper_v3.pdf from the manuscript.
 # The manuscript file is not modified. Figures are inserted only in the
 # temporary build copy, at the paragraphs that already cite them.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MANUSCRIPT="$ROOT/paper/gobekli-pillar43-statistics.md"
-OUT="$ROOT/gobekli-pillar43-statistics_paper_v2.pdf"
+OUT="$ROOT/gobekli-pillar43-statistics_paper_v3.pdf"
 HEADER="$ROOT/scripts/pdf_header.tex"
 FILTER="$ROOT/scripts/pdf_table_widths.lua"
 
@@ -58,7 +58,7 @@ preamble = [
     "\n",
     "**Authors:** Simone Pomposi, Independent Researcher\n",
     "\n",
-    "**Version:** 2 draft (2026-10-23, Europe/Paris). Not uploaded to Zenodo.  \n",
+    "**Version:** 3 (2026-11-10)  \n",
 ]
 for line in preamble:
     if not source.startswith(line):
@@ -77,7 +77,7 @@ def figure(path, caption, width="100%"):
 
 insertions = [
     (
-        "center **11,835 BC**.",
+        "The date test asks how often a match of that kind turns up, not whether this one is real.",
         figure(
             "output/fig4_anchor_bracket.png",
             "Figure 4. Anchor test at ±250 years: center-date matches and window matches.",
@@ -85,7 +85,7 @@ insertions = [
         )
         + figure(
             "output/fig1_timeline.png",
-            "Figure 1. Summer-solstice windows against the catalog.",
+            "Figure 1. Summer-solstice windows against the catalog. Red numbers mark the 14 event clusters. The blue line is the published date.",
         ),
     ),
     (
@@ -96,7 +96,7 @@ insertions = [
         ),
     ),
     (
-        "These rank-sum figures do not depend on the catalog or the boundary update.",
+        "These rank-sum figures do not depend on the event catalog.",
         figure(
             "output/fig3_rank_sum.png",
             "Figure 3. Rank-sum null distribution. The observed sum is 18.",
@@ -132,7 +132,7 @@ pandoc "$BUILD_MD" \
   --metadata=title:"How Significant Is the Pillar 43 Sky Map?" \
   --metadata=subtitle:"A Statistical Decomposition of the Göbekli Tepe Archaeoastronomy Claim" \
   --metadata=author:"Simone Pomposi, Independent Researcher" \
-  --metadata=date:"Version 2 draft (2026-10-23, Europe/Paris). Not uploaded to Zenodo." \
+  --metadata=date:"Version 3 (2026-11-10)" \
   --variable=lang:en \
   --variable=papersize:a4 \
   --variable=fontsize:11pt \
