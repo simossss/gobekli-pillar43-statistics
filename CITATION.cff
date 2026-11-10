@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the paper."
+title: "How Significant Is the Pillar 43 Sky Map? A Statistical Decomposition of the Göbekli Tepe Archaeoastronomy Claim"
+type: software
+authors:
+  - family-names: Pomposi
+    given-names: Simone
+version: "3"
+date-released: "2026-11-10"
+license: CC-BY-4.0
+repository-code: "https://github.com/simossss/gobekli-pillar43-statistics"
+doi: 10.5281/zenodo.20364946
+preferred-citation:
+  type: article
+  title: "How Significant Is the Pillar 43 Sky Map? A Statistical Decomposition of the Göbekli Tepe Archaeoastronomy Claim"
+  authors:
+    - family-names: Pomposi
+      given-names: Simone
+  year: 2026
+  doi: 10.5281/zenodo.20364946
+  url: "https://doi.org/10.5281/zenodo.20364946"

@@ -1,5 +1,5 @@
 ╔══════════════════════════════════════════════════════════════════════╗
-║  GÖBEKLI TEPE PILLAR 43 — STATISTICAL TEST  v2 corrections        ║
+║  GÖBEKLI TEPE PILLAR 43 — STATISTICAL TEST  v3 corrections        ║
 ║  Rank-sum × 2/7 is the published headline; date tests are separate ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
@@ -21,8 +21,11 @@ Two null models tested across 13 constellations × 4 cardinal days = 52 combos:
   BROAD:  any date in constellation window overlaps event tolerance
 
   ±100 yr:  center-only = 7/52 (13.5%)    window-overlap = 27/52 (51.9%)
+            centers inside 20,000–5,000 BC: 7/30 (23.3%)    position null (random date in window) = 10.5%
   ±250 yr:  center-only = 14/52 (26.9%)    window-overlap = 30/52 (57.7%)
+            centers inside 20,000–5,000 BC: 14/30 (46.7%)    position null (random date in window) = 23.9%
   ±500 yr:  center-only = 22/52 (42.3%)    window-overlap = 33/52 (63.5%)
+            centers inside 20,000–5,000 BC: 22/30 (73.3%)    position null (random date in window) = 39.8%
 
   BRACKET at ±250 yr:  26.9%  to  57.7%
   (strict to broad null model)
@@ -55,6 +58,10 @@ Two null models tested across 13 constellations × 4 cardinal days = 52 combos:
     SS at 10,950 BC → λ = 270.9° (J2000)
     Sagittarius ecliptic range: 266.5°–300.0°
     Sagittarius date window: 10,635–13,034 BC (center: 11,835 BC)
+    Published date 10,950 BC is 885 yr from that center.
+    ±100 yr: published date hit = True (YD cluster (Laacher+YD+YDIH), Δ=50 yr); midpoint hit = False (Older Dryas, Δ=240 yr)
+    ±250 yr: published date hit = True (YD cluster (Laacher+YD+YDIH), Δ=50 yr); midpoint hit = True (Older Dryas, Δ=240 yr)
+    ±500 yr: published date hit = True (YD cluster (Laacher+YD+YDIH), Δ=50 yr); midpoint hit = True (Older Dryas, Δ=240 yr)
 
 ========================================================================
 EXPERIMENT 2: EXACT RANK-SUM TEST (Visual Similarity)
@@ -81,6 +88,9 @@ EXPERIMENT 2: EXACT RANK-SUM TEST (Visual Similarity)
     → Sweatman's sum of 18 (with three rank-1 ties) is impossible
       under a distinct-ranks null. The with-replacement model is the natural
       permissive null under independent per-animal rankings.
+
+  Greek stick-figure set (published sum 26):
+    P(S ≤ 26) × 2/7 = 9.065e-06  (≈ 1 in 110,312)
 
 ========================================================================
 EXPERIMENT 3: JOINT PROBABILITY (independence assumption)
@@ -203,7 +213,7 @@ EXPERIMENT 8: MULTIVERSE / FORKING-PATHS ANALYSIS
 ========================================================================
 
   Exploratory joints only. These are not Sweatman's rank-sum × 2/7 headline.
-  Validity filter: observed Sagittarius × summer solstice must be a hit.
+  Validity filter: Sweatman's published date (10,950 BC) must be a hit.
   Precision-filtered catalog = half-width ≤ 250 yr (dating precision, not magnitude).
   Match windows use the path tolerance, not each cluster's half-width.
 
@@ -226,45 +236,38 @@ EXPERIMENT 8: MULTIVERSE / FORKING-PATHS ANALYSIS
 
   Exploratory reference path (not the published 1.4M):
     SS only, all events, ±250 yr, center anchor, all 6 animals
-    observed_hit = True (Older Dryas)
+    observed_hit = True (YD cluster (Laacher+YD+YDIH))
     P(joint) = 5.90e-07  (≈ 1 in 1,693,817)
 
   PRIMARY exclusions (of 32 paths, all 6 animals):
     zero-P paths:                 0
-    observed reading is a miss:   8
-    valid (observed reading hits): 24
+    observed reading is a miss:   0
+    valid (observed reading hits): 32
     v1-style tally (drop zero-P, no hit filter): 13/32 = 40.6%
-    validity-filtered tally:      5/24 = 20.8%
+    validity-filtered tally:      13/32 = 40.6%
     Miss paths are excluded from this tally. Zero-P paths are counted
     in the exclusion line above and are not dropped silently.
-    Valid primary joint range: 4.43e-07 to 1.57e-06
-    Valid primary median:      7.87e-07
+    Valid primary joint range: 1.48e-07 to 1.57e-06
+    Valid primary median:      7.13e-07
 
   FULL multiverse exclusions (of 128 paths):
-    zero-P: 0; observed miss: 32; valid: 96
+    zero-P: 0; observed miss: 0; valid: 128
 
   Most significant VALID primary path:
-    All 4, Precision-filtered (hw≤250), ±250 yr, center, All 6 (sum=18)
-    P = 4.43e-07  (≈ 1 in 2,258,423)
+    All 4, Precision-filtered (hw≤250), ±100 yr, center, All 6 (sum=18)
+    P = 1.48e-07  (≈ 1 in 6,775,270)
   Least significant VALID primary path:
     SS only, All events, ±100 yr, window, All 6 (sum=18)
     P = 1.57e-06  (≈ 1 in 635,182)
 
-  Primary date-rules where the observed reading misses (8):
-    All 4, All events, ±100 yr, center
-    All 4, All events, ±200 yr, center
-    All 4, Precision-filtered (hw≤250), ±100 yr, center
-    All 4, Precision-filtered (hw≤250), ±200 yr, center
-    SS only, All events, ±100 yr, center
-    SS only, All events, ±200 yr, center
-    SS only, Precision-filtered (hw≤250), ±100 yr, center
-    SS only, Precision-filtered (hw≤250), ±200 yr, center
+  Primary date-rules where the observed reading misses (0):
 
   Interpretation:
     Joint products are path-dependent. Dropping animals post hoc (extended
     multiverse) is a stronger degree of freedom than center vs. window.
-    Paths on which Sagittarius × summer solstice is a miss are not alternative
-    evaluations of the observed reading. P(top) × P(bottom) is not used here.
+    A path on which the published date is a miss would not be an alternative
+    evaluation of the observed reading. No path here is such a miss.
+    P(top) × P(bottom) is not used here.
 
 ========================================================================
 EXPERIMENT 9: COVERAGE FRACTION
@@ -280,6 +283,30 @@ EXPERIMENT 9: COVERAGE FRACTION
   At ±250 yr, 41.8% of all years between 20,000 and 5,000 BC are
   within 250 years of a notable event. A random date drawn from this
   window has a 41.8% chance of being 'near something notable.'
+
+========================================================================
+ROBUSTNESS CHECK A: ONLY EVENTS THAT PREDATE THE MONUMENT
+========================================================================
+
+  Cut-off: 9,500 BC. Kept 7 clusters, removed 7.
+  Removed: PBO / Bond 8 / MWP-1B, Bond 7, Mammoth extinction (N. Asia, 14C placeholder), Bond 6, 8.2ka cluster (Agassiz+Storegga), Mazama VEI 7, Late cluster (BlackSea+Kikai)
+  Window: 20,000–9,500 BC (10,500 years)
+
+  ±100 yr:  coverage 13.3%   center 3/52 (5.8%)   centers in window 3/19 (15.8%)   window 18/52 (34.6%)
+  ±250 yr:  coverage 33.3%   center 7/52 (13.5%)   centers in window 7/19 (36.8%)   window 21/52 (40.4%)
+  ±500 yr:  coverage 57.9%   center 12/52 (23.1%)   centers in window 11/19 (57.9%)   window 25/52 (48.1%)
+
+  The date coincidence is still not rare when later events are removed.
+
+========================================================================
+ROBUSTNESS CHECK B: THE MAMMOTH CLUSTER
+========================================================================
+
+  As in the catalog (7,700 BCE placeholder)            center 14/52   window 30/52   coverage 41.8%
+  Cluster removed                                      center 14/52   window 30/52   coverage 40.2%
+  Moved to 9,150 BCE (IntCal20, approximate)           center 15/52   window 30/52   coverage 41.8%
+
+  The cluster does not carry the result either way.
 
 ========================================================================
 EXPERIMENT 10: CIRCULAR-SHIFT CATALOG TEST
@@ -383,19 +410,23 @@ SUMMARY
   5. CATALOG ROBUSTNESS: 9.6%–38.5% (mean 25.7%) across 500 catalogs.
   6. DECOMPOSITION: Pre-specified top 3 = 1 in 85,184. Selection-adjusted = 1 in 4,484. Bottom 3 = 1 in 187.
   7. LEAVE-ONE-EVENT-OUT: Min anchor P = 21.2%.
-  8. MULTIVERSE (validity-filtered primary): 4.4e-07–1.6e-06; 5/24 valid paths ≤ reference (20.8%). Reference observed_hit=True.
+  8. MULTIVERSE (primary, 32/32 valid): 1.5e-07–1.6e-06 (factor 10.7); 13/32 paths ≤ reference (40.6%). Published date matches: YD cluster (Laacher+YD+YDIH).
   9. COVERAGE: 41.8% of 20,000–5,000 BC is within ±250 yr of a catalogued event.
   10. CIRCULAR-SHIFT: 37.6% of shifts ≥ baseline.
   11. ANIMAL-LOO: Most critical (tied) = Scorpion, Wolf/dog (canid), Tall bird + snake (14.7× impact).
   12. RANKING SENSITIVITY: Conservative (+1) drops to 1 in 53,912.
   13. IDENTITY PERMUTATION: P(specific trio gets all rank-1 slots) = 5%.
+  A. PRE-MONUMENT EVENTS ONLY (≥ 9,500 BC): coverage 33.3%; strict 7/52; in-window 7/19.
+  B. MAMMOTH CLUSTER: removed → 14/52 strict.
 
   KEY FINDINGS:
   - The published ~1-in-1.4-million figure is rank-sum × 2/7, not a date×visual joint.
   - The date coincidence is not rare under this catalog: coverage 41.8%; strict anchor 26.9%; broad anchor 57.7%.
   - Pre-specified top-3 rarity is 1 in 85,184; sort-then-pick is 1 in 4,484.
   - Those rankings are self-scored. The canid → Lupus identification is tentative.
-  - Validity-filtered multiverse paths are a distribution, not a single p-value.
+  - Sweatman's published date (10,950 BC) is 50 years from the Younger Dryas cluster.
+    The Sagittarius midpoint (11,835 BC) is only what the null draws.
+  - Multiverse paths are a distribution, not a single p-value.
   - A blind ranking experiment would be the decisive test.
 
 Generating figures...
